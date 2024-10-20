@@ -24,7 +24,7 @@ class EventLoop {
 
         /// @brief - adds a new file to the analysis
         void addFile(TString filename) {files.push_back(filename);};
-
+        /// @todo - add setters instead of initialize and move initialization to execute method
         /// @brief - initialize all the variables for the execution of the analysis
         void initialize(EventData* evt_data, const ObjectSelection* obj_selection, const Cut* cut);
 
