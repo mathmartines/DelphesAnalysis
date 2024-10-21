@@ -5,6 +5,7 @@
 #include <memory>
 #include "TString.h"
 #include "TChain.h"
+#include "TClonesArray.h"
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
 #include "DelphesAnalysis/EventData.h"
 #include "DelphesAnalysis/ObjectSelection.h"
@@ -24,9 +25,14 @@ class EventLoop {
 
         /// @brief - adds a new file to the analysis
         void addFile(TString filename) {files.push_back(filename);};
-        /// @todo - add setters instead of initialize and move initialization to execute method
+
+        /// @brief - setters
+        void setEventData (EventData* evt_data) {event_data = evt_data;};
+        void setObjectSelection (const ObjectSelection* obj_selection) {selection = obj_selection;};
+        void setCuts (const Cut* cut) {selection_cuts = cut;};
+
         /// @brief - initialize all the variables for the execution of the analysis
-        void initialize(EventData* evt_data, const ObjectSelection* obj_selection, const Cut* cut);
+        void initialize();
 
         /// @brief - runs the analysis to iterate over all the events in the file
         void execute();
@@ -42,13 +48,13 @@ class EventLoop {
         std::vector<TString> files;
 
         /// @brief - pointer to the EventData object that which branches of data we must store
-        EventData* event_data;
+        EventData* event_data = nullptr;
 
         /// @brief - tells how we need to select the objects (Leptons, Jets, etc) for the analysis
-        const ObjectSelection* selection;
+        const ObjectSelection* selection = nullptr; 
 
         /// @brief - pointer to a Cut object which tells if the event must be selected or not
-        const Cut* selection_cuts;
+        const Cut* selection_cuts = nullptr;
 };
 
 #endif

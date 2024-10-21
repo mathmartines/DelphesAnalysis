@@ -22,16 +22,13 @@ $(ODIR)/%.o: src/%.cpp $(IDIR)/%.h | $(ODIR)
 # Specific targets for ATLAS analysis
 ATLAS13DITAUPATH = examples/DY/di-tau-ATLAS13TEV
 
-ditauAtlas13tev: ditauAtlas13tev.o $(OBJ) ditauAtlas13tev_selections.o ditauAtlas13tev_cuts.o
+ditauAtlas13tev: ditauAtlas13tev.o $(OBJ) ditauAtlas13tev_selections.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.h $(ATLAS13DITAUPATH)/ditauAtlas13tev_cuts.h
+ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 ditauAtlas13tev_selections.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.cpp $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.h $(DEPS)
-	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
-
-ditauAtlas13tev_cuts.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev_cuts.cpp $(ATLAS13DITAUPATH)/ditauAtlas13tev_cuts.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 clean:

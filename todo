@@ -1,3 +1,1 @@
-add setters on EventLoop class;
-remove initialization method;
 implement back-to-back cut;
