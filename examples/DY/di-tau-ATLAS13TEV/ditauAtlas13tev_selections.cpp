@@ -42,16 +42,11 @@ void HadronicTaus::selectObjects(EventData* event_data) const {
     /// loop over the selected jets
     for (Jet* jet: event_data->jets) {
         /// check if the jet has been tagged as a tau
-        // std::cout << jet->BTag << std::endl;
-        // if (!jet->TauTag) continue; 
+        if (!jet->TauTag) continue; 
         /// charge must be +1 or -1
-        // if (abs(jet->Charge) != 1) continue;
-        // std::cout << "pT: " << jet->PT << std::endl;
-        // std::cout << "tau-tag: " << jet->TauTag << std::endl;
-        // std::cout << "tau-weight: " << jet->TauWeight << std::endl;
-        // std::cout << "tau-NCharged: " << jet->NCharged << std::endl;
+        if (abs(jet->Charge) != 1) continue;
         /// the number of tracks has to be 1 or 3
-        // if (!(jet->NCharged == 1 || jet->NCharged == 3)) continue;
+        if (!countTracks(event_data, jet)) continue;
         /// removing eta window
         if(abs(jet->Eta) >= 1.37 && abs(jet->Eta) < 1.52) continue;
         /// all the tau candidates passed
@@ -59,11 +54,28 @@ void HadronicTaus::selectObjects(EventData* event_data) const {
     }
 }
 
+bool HadronicTaus::countTracks(EventData* event_data, Jet* hadronic_tau) const {
+    /// holds the number of tracks around the jet
+    int number_tracks = 0; 
+    /// hadronic-tau four momentum
+    const TLorentzVector& tau_momentum = hadronic_tau->P4();
+    
+    /// finds the tracks within a DeltaR < 0.2 of the jet
+    const TClonesArray* branch_track = event_data->getTracks();
+    for (int i = 0; i < branch_track->GetEntries(); i++) {
+        Track* track = (Track*) branch_track->At(i);
+        if (tau_momentum.DeltaR(track->P4()) < 0.2)
+            number_tracks++;
+    }
+
+    return number_tracks == 1 || number_tracks == 3;
+}
+
 bool HadronicTausCut::selectEvent(EventData* event_data) const {
     /// stores the right pt
     std::vector<Jet*> selected_taus;
     for(Jet* tau_had: event_data->hadronic_taus)
-        if(tau_had->PT > 160)
+        if(tau_had->PT > 80)
             selected_taus.push_back(tau_had);
     /// updating the list of hadronic taus in the event data
     event_data->hadronic_taus = selected_taus;
@@ -71,7 +83,7 @@ bool HadronicTausCut::selectEvent(EventData* event_data) const {
     if (event_data->hadronic_taus.size() < 2)
         return false;
     // and the leading tau must have pT > 165
-    if (event_data->hadronic_taus[0]->PT < 165)
+    if (event_data->hadronic_taus[0]->PT < 85)
         return false;
     /// opposite charge check 
     if(!oppositeCharge(event_data))

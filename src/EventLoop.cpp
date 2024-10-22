@@ -17,13 +17,12 @@ void EventLoop::execute() {
     // checks if the object has been initialized
     if (!tree_reader) 
         throw std::runtime_error("Calling execute while the event loop was not initialized.");
-        
     // run analysis
     int passed_evts = 0;
     for (int index = 0; index < tree_reader->GetEntries(); index++) {
         if (index % 1000 == 0)
             std::cout << "Reached " << index << " events" << std::endl;
-        tree_reader->ReadEntry(index);          
+        tree_reader->ReadEntry(index);         
         // selects the objects for the analysis
         selection->selectObjects(event_data);
         // checks if the event passes all the cuts

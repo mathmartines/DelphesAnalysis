@@ -38,11 +38,13 @@ class Jets: public ObjectSelection {
 class HadronicTaus: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
+    private:
+        /// @brief - counts the number of tracks around the hadronic tau within a radius equal to 0.2
+        ///          the hadronic tau candidates must have only one or three associated tracks 
+        bool countTracks(EventData* event_data, Jet* hadronic_tau) const;
 };
 
 /// ------------------------------ Cuts --------------------------------
-
-//// Cuts for the tau-hadronic tau-hadronic channel
 
 /// @brief - no leptons in the event
 class LeptonsVeto: public Cut {

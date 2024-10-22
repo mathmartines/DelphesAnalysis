@@ -7,4 +7,5 @@ void EventData::setTree(std::shared_ptr<ExRootTreeReader> tree) {
     branch_electrons = tree_reader->UseBranch("Electron");
     branch_muons = tree_reader->UseBranch("Muon");
     branch_met = tree_reader->UseBranch("MissingET");
+    branch_track = tree_reader->UseBranch("Track");
 }

@@ -19,22 +19,25 @@ int main() {
     const HadronicTausCut tau_had_cuts;
     const bVeto b_veto;
     AnalysisCuts ditau_had_bveto_analysis ({
-        // &leptons_veto,
+        &leptons_veto,
         &tau_had_cuts, 
-        // &b_veto
+        &b_veto
     });
 
     /// stores the data for the event
     EventData data;
     /// pefforms the event loop and selects the signal events
     EventLoop evtLoop;
+
     /// sets all the needed pointers
     evtLoop.setEventData(&data);
     evtLoop.setObjectSelection(&particle_selections);
     evtLoop.setCuts(&ditau_had_bveto_analysis);
+
     /// adds the file that we must run the analysis on
-    evtLoop.addFile("/Users/martines/Desktop/Physics/MG5_aMC_v2_9_20/test_tautau/Events/run_01/delphes2.root");
-    // evtLoop.addFile("/home/martines/work/MG5_aMC_v3_1_1/test_tau/Events/run_02/delphes2.root");
+    // evtLoop.addFile("/Users/martines/Desktop/Physics/MG5_aMC_v2_9_20/test_tautau/Events/run_01/delphes.root");
+    evtLoop.addFile("/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/ditau-ATLAS13TEV/recast/cHgg-cHgg/Events/run_01/delphes_atlas.root");
+    
     /// specifies the structure of the data and how the objects must be selected
     evtLoop.initialize();
     /// lanches the analysis

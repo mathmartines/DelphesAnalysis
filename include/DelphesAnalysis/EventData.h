@@ -20,12 +20,13 @@ class EventData {
         const TClonesArray* const &getElectrons() const {return branch_electrons;};
         const TClonesArray* const &getMuons() const {return branch_muons;};
         const TClonesArray* const &getMET() const {return branch_met;};
+        const TClonesArray* const &getTracks() const {return branch_track;};
 
         /// @brief - vectors to store the pointers to the particles we'll use in the analysis
         std::vector<Electron*> electrons;
         std::vector<Muon*> muons;
         std::vector<Jet*> jets;
-        std::vector<Jet*> hadronic_taus; /// @TODO - specific to the di-tau analysis. It should not be here. 
+        std::vector<Jet*> hadronic_taus;
 
     protected:
         /// @brief - pointer to the tree object
@@ -36,6 +37,7 @@ class EventData {
         const TClonesArray* branch_electrons = nullptr;
         const TClonesArray* branch_muons = nullptr;
         const TClonesArray* branch_met = nullptr;
+        const TClonesArray* branch_track = nullptr;
 };
 
 #endif
