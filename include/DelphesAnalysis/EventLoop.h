@@ -37,6 +37,9 @@ class EventLoop {
         /// @brief - runs the analysis to iterate over all the events in the file
         void execute();
 
+        /// @brief - resets the TChain for a different run
+        void reset();
+
     private:
         /// @brief - stores the chain to acess the files
         TChain chain;

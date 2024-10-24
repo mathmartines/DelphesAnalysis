@@ -8,7 +8,7 @@
 /// @brief - Interface for the particle and object selection for the analysis.
 class ObjectSelection {
     public:
-        /// @brief - Specify how the particles or event object must be selected for the analysis
+        /// @brief - Specify how the particles or event objects must be selected for the analysis
         /// @param event_data - stores the information about the event
         virtual void selectObjects(EventData* event_data) const = 0;
 };

@@ -8,6 +8,7 @@
 /// @brief - Interface to hold the cut or cuts to be applied on the events.
 class Cut {
     public: 
+        Cut() = default;
         /// @brief - applys the cut or cuts to decide wheter the event qualified as a signal
         /// @param event_data - pointer to the object that stores the information about the event
         /// @return - returns True if the event must be selected, and False otherwise

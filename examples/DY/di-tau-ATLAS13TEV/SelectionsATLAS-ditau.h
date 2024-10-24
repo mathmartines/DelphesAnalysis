@@ -9,6 +9,7 @@
 #include "classes/DelphesClasses.h"
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/Cut.h"
+#include "DelphesAnalysis/Observable.h"
 
 /// ------------------------- Particle Selections -------------------------
 
@@ -55,14 +56,17 @@ class LeptonsVeto: public Cut {
 };
 
 /// @brief - cuts on the pT of the hadronic taus
+///          check if we have a pair of opposite charge tau candidates
+///          checl if the taus are back to back
 class HadronicTausCut: public Cut {
     public:
+        HadronicTausCut() = default;
         bool selectEvent(EventData* event_data) const override;
     private: 
         /// @brief - checks if the selected hadronic taus have opposite charge 
         bool oppositeCharge(EventData* event_data) const;
-        /// @brief - checks if the tau candidates are back to back in the transverse plane
-        bool backToBack(EventData* event_data) const;
+        /// @brief - calculates the angular diff
+       const DeltaPhi obs_deltaphi;
 };
 
 /// @brief - veto on events with jets tagged as containing a b
@@ -70,5 +74,51 @@ class bVeto: public Cut {
     public:
         bool selectEvent(EventData* event_data) const override;
 };
+
+/// @brief - selects events only if there's at least one b-tagged jet
+class bTag: public Cut {
+    public: 
+        bool selectEvent(EventData* event_data) const override;
+};
+
+/// @brief - cuts on the leptons pT
+///        - assumes we only have one lepton
+class LeptonPtCut: public Cut{
+    public: 
+        bool selectEvent(EventData* event_data) const override;
+};
+
+/// @brief - selects events with only one lepton
+class SingleLeptonCut: public Cut {
+    public:
+        bool selectEvent(EventData* event_data) const override;
+};
+
+/// @brief - selects events with at least one tau
+class ContainsHadronicTaus: public Cut {
+    public:
+        bool selectEvent(EventData* event_data) const override {return event_data->hadronic_taus.size() > 0;};
+};
+
+/// @brief - checks if the hadronic tau has the oppostite charge of the lepton
+///          checks if the lepton and hadronic tau are back to back
+///          checks if the transverse mass of the missing energy and lepton is less than 40GeV
+///          checks if the invariant mass of the hadronic tau and lepton is not inside the Z mass window
+class TauLeptonEventsCuts: public Cut {
+    public: 
+        bool selectEvent(EventData* event_data) const override;
+    
+    private:
+        /// @brief - checks if there's a tau with |eta| < 2.3 with opposite electric charge of the lepton 
+        bool oppositeChargeHadTau(EventData* event_data, int lepton_charge) const; 
+        /// @brief - calculates the observables
+        const DeltaPhi delta_phi;
+        const TransverseMass mt;
+        const TransverseMassATLAS mtatlas;
+        const InvariantMass m;
+};
+
+
+
 
 #endif

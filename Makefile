@@ -7,7 +7,7 @@ LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTre
 IDIR = include/DelphesAnalysis
 ODIR = lib
 
-_DEPS = EventData EventLoop
+_DEPS = EventData EventLoop Analysis Observable
 DEPS = $(patsubst %, $(IDIR)/%.h, $(_DEPS)) 
 OBJ = $(patsubst %, $(ODIR)/%.o, $(_DEPS))
 
@@ -22,13 +22,13 @@ $(ODIR)/%.o: src/%.cpp $(IDIR)/%.h | $(ODIR)
 # Specific targets for ATLAS analysis
 ATLAS13DITAUPATH = examples/DY/di-tau-ATLAS13TEV
 
-ditauAtlas13tev: ditauAtlas13tev.o $(OBJ) ditauAtlas13tev_selections.o
+ditauAtlas13tev: ditauAtlas13tev.o $(OBJ) SelectionsATLAS-ditau.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.h
+ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/AnalysisATLAS-ditau.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
-ditauAtlas13tev_selections.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.cpp $(ATLAS13DITAUPATH)/ditauAtlas13tev_selections.h $(DEPS)
+SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 clean:
