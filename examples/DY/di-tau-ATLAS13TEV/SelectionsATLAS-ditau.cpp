@@ -137,16 +137,12 @@ bool TauLeptonEventsCuts::selectEvent(EventData* event_data) const {
     TLorentzVector lepton_momentum;
 
     if (event_data->electrons.size() == 1) {
-        for (Electron* lepton: event_data->electrons) {
-            lepton_charge = lepton->Charge;
-            lepton_momentum = lepton->P4();
-        }
+        lepton_charge = event_data->electrons[0]->Charge;
+        lepton_momentum = event_data->electrons[0]->P4();
     }
     else {
-        for (Muon* lepton: event_data->muons) {
-            lepton_charge = lepton->Charge;
-            lepton_momentum = lepton->P4();
-        }
+        lepton_charge = event_data->muons[0]->Charge;
+        lepton_momentum = event_data->muons[0]->P4();
     }
     // checks if a hadronic tau with opposite charge is found
     if (!oppositeChargeHadTau(event_data, lepton_charge))

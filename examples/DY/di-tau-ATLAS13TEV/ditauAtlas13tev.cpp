@@ -32,7 +32,7 @@ int main() {
     AnalysisCuts b_veto_taulep_tauhad ({&single_lepton_cut, &lepton_pt_cut, &number_taush, &tau_lep_evts_cuts, &bveto_evts});
     AnalysisCuts b_tag_taulep_tauhad ({&single_lepton_cut, &lepton_pt_cut, &number_taush, &tau_lep_evts_cuts, &btag_events});
 
-    /// default wayy to store the information about the event
+    /// default way to store the information about the event
     EventData event_data;
 
     /// handles the loop over all the event
