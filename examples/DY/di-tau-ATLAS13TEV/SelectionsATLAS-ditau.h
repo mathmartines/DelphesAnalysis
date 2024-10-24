@@ -60,14 +60,14 @@ class LeptonsVeto: public Cut {
 ///          checl if the taus are back to back
 class HadronicTausCut: public Cut {
     public:
-        HadronicTausCut() = default;
+        HadronicTausCut(): obs_deltaphi() {};
         bool selectEvent(EventData* event_data) const override;
     private: 
         /// @brief - checks if the selected hadronic taus have opposite charge 
         bool oppositeCharge(EventData* event_data) const;
         /// @brief - calculates the angular diff
        const DeltaPhi obs_deltaphi;
-};
+};  
 
 /// @brief - veto on events with jets tagged as containing a b
 class bVeto: public Cut {
@@ -81,6 +81,12 @@ class bTag: public Cut {
         bool selectEvent(EventData* event_data) const override;
 };
 
+/// @brief - selects events with only one lepton
+class SingleLeptonCut: public Cut {
+    public:
+        bool selectEvent(EventData* event_data) const override;
+};
+
 /// @brief - cuts on the leptons pT
 ///        - assumes we only have one lepton
 class LeptonPtCut: public Cut{
@@ -88,14 +94,8 @@ class LeptonPtCut: public Cut{
         bool selectEvent(EventData* event_data) const override;
 };
 
-/// @brief - selects events with only one lepton
-class SingleLeptonCut: public Cut {
-    public:
-        bool selectEvent(EventData* event_data) const override;
-};
-
 /// @brief - selects events with at least one tau
-class ContainsHadronicTaus: public Cut {
+class NumberOfHadronicTaus: public Cut {
     public:
         bool selectEvent(EventData* event_data) const override {return event_data->hadronic_taus.size() > 0;};
 };
@@ -106,6 +106,7 @@ class ContainsHadronicTaus: public Cut {
 ///          checks if the invariant mass of the hadronic tau and lepton is not inside the Z mass window
 class TauLeptonEventsCuts: public Cut {
     public: 
+        TauLeptonEventsCuts(): delta_phi(), mt(), mtatlas(), m() {};
         bool selectEvent(EventData* event_data) const override;
     
     private:

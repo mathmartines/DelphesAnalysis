@@ -14,11 +14,11 @@ class ObjectSelection {
 };
 
 /// @brief - holds a set of particle selections
-class CompositeSelections: public ObjectSelection {
+class AnalysisSelections: public ObjectSelection {
     
     public:
-        CompositeSelections() = default;
-        CompositeSelections(std::vector<const ObjectSelection*> selections): selectors(selections) {};
+        AnalysisSelections() = default;
+        AnalysisSelections(std::vector<const ObjectSelection*> selections): selectors(selections) {};
 
         /// @brief - adds a new selection
         void addSelection(const ObjectSelection* selection) {selectors.push_back(selection);};

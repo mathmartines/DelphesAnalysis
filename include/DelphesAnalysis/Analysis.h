@@ -2,7 +2,6 @@
 #define ANALYSIS_H
 
 #include "TString.h"
-#include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/Cut.h"
@@ -12,24 +11,21 @@
 ///          which data must be store need to be provide by the subclasses             
 class Analysis {
 
-    public:        
-        /// @brief - returns a pointer to the object storing all the information about the event
-        virtual EventData* getEventData() = 0;
-        /// @brief - returns a pointer to the object that specifies how the particles must be selected for the analysis
-        virtual const ObjectSelection* getObjectSelection() const = 0;
-        /// @brief - returns a pointer to the cuts to be applied
-        virtual const Cut* getCuts() const = 0;
-        
-        const TString getAnalysisName() const {return analysis_name;};
+    public:
+        /// @brief - applies all the selection cuts to the event
+        ///          it returns true if the event passed all the cuts, and false otherwise
+        bool processEvent(EventData* event_data) const;
 
-        /// @brief - runs the analysis
-        void runAnalysis(TString filename);
+        /// @brief - setters
+        void setObjectSelection(const ObjectSelection* object_selection) {obj_selection = object_selection;};
+        void setCuts(const Cut* cuts) {selection_cuts = cuts;};
 
     protected:
-        /// @brief - runs the event loop
-        EventLoop event_loop;
-        /// @brief - name for the analysis
-        TString analysis_name = "";
+        /// @brief - tells how we need to select the objects (Leptons, Jets, etc) for the analysis
+        const ObjectSelection* obj_selection = nullptr; 
+
+        /// @brief - pointer to a Cut object which tells if the event must be selected or not
+        const Cut* selection_cuts = nullptr;
 };
 
 #endif

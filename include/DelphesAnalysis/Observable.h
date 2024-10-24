@@ -33,6 +33,7 @@ class InvariantMass: public Observable {
 
 class TransverseMassATLAS: public Observable {
     public: 
+        TransverseMassATLAS(): dphi(){};
         double evaluateObservable(const std::vector<TLorentzVector>& momentums) const override;
     private:
         const DeltaPhi dphi;

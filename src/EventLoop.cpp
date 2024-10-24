@@ -1,37 +1,29 @@
 #include "DelphesAnalysis/EventLoop.h"
 
-void EventLoop::initialize() {
+long double EventLoop::run(Analysis* analysis) {
     /// adds all the root files to the chain
     for (auto file: files)
         chain.Add(file);
+    
     /// creates the shared pointer to a tree reader object
     tree_reader = std::make_shared<ExRootTreeReader>(&chain);
-    /// checks if all the pointers have been set
-    if (!event_data || !selection || !selection_cuts)
-        throw std::runtime_error("Calling initialize with references to null pointers.");
-    /// adds the tree to the data object
+    
+    /// let EventData stores all the information needed for the analysis
     event_data->setTree(tree_reader);
-}
 
-void EventLoop::execute() {
-    // checks if the object has been initialized
-    if (!tree_reader) 
-        throw std::runtime_error("Calling execute while the event loop was not initialized.");
-    // run analysis
+    /// holds the number of events that passed the analysis
     int passed_evts = 0;
-    for (int index = 0; index < tree_reader->GetEntries(); index++) {
-        // if (index % 1000 == 0)
-        //     std::cout << "Reached " << index << " events" << std::endl;
-        tree_reader->ReadEntry(index);         
-        // selects the objects for the analysis
-        selection->selectObjects(event_data);
-        // std::cout << event_data->hadronic_taus.size() << std::endl;
-        // checks if the event passes all the cuts
-        if (!selection_cuts->selectEvent(event_data)) continue;
-        // updates the counter and the histograms
-        passed_evts++;
+    
+    /// launches the event loop
+    for (int iEvent = 0; iEvent < tree_reader->GetEntries(); iEvent++) {
+        /// gets the information about the current event
+        tree_reader->ReadEntry(iEvent);
+        /// delegates the analysis of the event to the analysis object
+        if (analysis->processEvent(event_data))
+            passed_evts++;
     }
     std::cout << "Passed: " << passed_evts << "/" << tree_reader->GetEntries() << std::endl;
+    return static_cast<long double>(passed_evts) / tree_reader->GetEntries();
 }
 
 void EventLoop::reset() {
@@ -40,3 +32,4 @@ void EventLoop::reset() {
     /// resets the TChain
     chain.Reset();
 }
+    
