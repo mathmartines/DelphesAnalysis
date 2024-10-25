@@ -20,7 +20,7 @@ long double EventLoop::run(Analysis* analysis) {
         tree_reader->ReadEntry(iEvent);
         /// delegates the analysis of the event to the analysis object
         if (analysis->processEvent(event_data))
-            passed_evts++;
+            passed_evts++; 
     }
     std::cout << "Passed: " << passed_evts << "/" << tree_reader->GetEntries() << std::endl;
     return static_cast<long double>(passed_evts) / tree_reader->GetEntries();

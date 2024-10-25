@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <variant>
 #include <math.h>
 #include "TClonesArray.h"
 #include "TLorentzVector.h"
@@ -10,6 +11,7 @@
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/Cut.h"
 #include "DelphesAnalysis/Observable.h"
+#include "DelphesAnalysis/EventData.h"
 
 /// ------------------------- Particle Selections -------------------------
 
@@ -45,14 +47,26 @@ class HadronicTaus: public ObjectSelection {
         bool countTracks(EventData* event_data, Jet* hadronic_tau) const;
 };
 
-/// ------------------------------ Cuts --------------------------------
+// /// ------------------------------ Cuts --------------------------------
 
 /// @brief - no leptons in the event
-class LeptonsVeto: public Cut {
+class NumberOfLeptons: public Cut {
     public:
-        bool selectEvent(EventData* event_data) const override {
-            return event_data->electrons.size() + event_data->muons.size() == 0;    
-        };
+        NumberOfLeptons(int number): number_of_lep(number) {};
+        bool selectEvent(EventData* event_data) const override;
+    private:
+        /// @brief - stores the number of leptons we must have in the event
+        int number_of_lep;
+};
+
+/// @brief - cuts on the number of hadronic taus in the event
+class NumberOfTauHad: public Cut {
+    public: 
+        NumberOfTauHad(int min): min_taus(min) {};
+        bool selectEvent(EventData* event_data) const override;
+    private:
+        /// minimum number of hadronic taus in the event
+        int min_taus;
 };
 
 /// @brief - cuts on the pT of the hadronic taus
@@ -60,13 +74,16 @@ class LeptonsVeto: public Cut {
 ///          checl if the taus are back to back
 class HadronicTausCut: public Cut {
     public:
-        HadronicTausCut(): obs_deltaphi() {};
+        HadronicTausCut(): obs_deltaphi(), number_of_taus_cut(2) {};
         bool selectEvent(EventData* event_data) const override;
     private: 
+        /// @brief - selects taus with pT greater than 125 GeV
+        void selectTaus(EventData* event_data) const;
         /// @brief - checks if the selected hadronic taus have opposite charge 
         bool oppositeCharge(EventData* event_data) const;
         /// @brief - calculates the angular diff
        const DeltaPhi obs_deltaphi;
+       const NumberOfTauHad number_of_taus_cut;
 };  
 
 /// @brief - veto on events with jets tagged as containing a b
@@ -81,12 +98,6 @@ class bTag: public Cut {
         bool selectEvent(EventData* event_data) const override;
 };
 
-/// @brief - selects events with only one lepton
-class SingleLeptonCut: public Cut {
-    public:
-        bool selectEvent(EventData* event_data) const override;
-};
-
 /// @brief - cuts on the leptons pT
 ///        - assumes we only have one lepton
 class LeptonPtCut: public Cut{
@@ -94,11 +105,6 @@ class LeptonPtCut: public Cut{
         bool selectEvent(EventData* event_data) const override;
 };
 
-/// @brief - selects events with at least one tau
-class NumberOfHadronicTaus: public Cut {
-    public:
-        bool selectEvent(EventData* event_data) const override {return event_data->hadronic_taus.size() > 0;};
-};
 
 /// @brief - checks if the hadronic tau has the oppostite charge of the lepton
 ///          checks if the lepton and hadronic tau are back to back
@@ -118,8 +124,6 @@ class TauLeptonEventsCuts: public Cut {
         const TransverseMassATLAS mtatlas;
         const InvariantMass m;
 };
-
-
 
 
 #endif

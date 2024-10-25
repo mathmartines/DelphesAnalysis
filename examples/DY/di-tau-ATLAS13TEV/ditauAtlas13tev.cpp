@@ -4,7 +4,9 @@
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
 #include "DelphesAnalysis/Analysis.h"
+#include "EventDataATLAS.h"
 #include "SelectionsATLAS-ditau.h"
+
 
 using namespace std;
 
@@ -17,13 +19,13 @@ int main() {
     const AnalysisSelections atlas_ditau_selections ({&electron_selection, &muon_selection, &jets, &taus_had});
 
     /// all the cuts for the analysis
-    const LeptonsVeto leptons_veto;
+    const NumberOfLeptons leptons_veto(0);
     const HadronicTausCut hadronic_ditaus_evts;
     const bVeto bveto_evts;
     const bTag btag_events;
-    const SingleLeptonCut single_lepton_cut;
+    const NumberOfLeptons single_lepton_cut(1);
     const LeptonPtCut lepton_pt_cut;
-    const NumberOfHadronicTaus number_taush;
+    const NumberOfTauHad number_taush(1);
     const TauLeptonEventsCuts tau_lep_evts_cuts;
 
     // defining the analysis to be made
@@ -33,7 +35,7 @@ int main() {
     AnalysisCuts b_tag_taulep_tauhad ({&single_lepton_cut, &lepton_pt_cut, &number_taush, &tau_lep_evts_cuts, &btag_events});
 
     /// default way to store the information about the event
-    EventData event_data;
+    EventDataATLAS event_data;
 
     /// handles the loop over all the event
     EventLoop atlas_evt_loop;
@@ -47,7 +49,6 @@ int main() {
     TString simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/ditau-ATLAS13TEV/recast/cHgg-cHgg_";
     /// all the masses
     vector<TString> folders = {
-        "200GeV/Events/run_02", 
         "300GeV/Events/run_02",
         "400GeV/Events/run_02", 
         "600GeV/Events/run_02", 

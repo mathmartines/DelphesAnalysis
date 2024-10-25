@@ -7,12 +7,19 @@ class EventDataATLAS: public EventData {
 
     public:
         /// @brief - set the tree reader pointer to extract the data from
-        void setTree (std::shared_ptr<ExRootTreeReader> tree) override;
-        
-
-
+        void setBranches() override {
+            /// branches needed 
+            addBranch("Jet");
+            addBranch("Electron");
+            addBranch("Muon");
+            addBranch("MissingET");
+            addBranch("Track");
+            /// defining the vectors to hold the particles for the analysis
+            addParticlesVector("Electron");
+            addParticlesVector("Muon");
+            addParticlesVector("Jet");
+            addParticlesVector("HadronicTau");
+        };       
 };
-
-
 
 #endif
