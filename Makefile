@@ -31,10 +31,30 @@ ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITA
 SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+# Specific targets for the CMS dielectron analysis
+CMS13TEVDILEPTON = examples/DY/cms-dilepton-13TEV
+
+cms_dielectron_13TEV: cms_dielectron_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_dielectron_13TEV.o: $(CMS13TEVDILEPTON)/cms_dielectron_13TEV.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+SelectionsCMS_dilepton.o: $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.cpp $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(DEPS)
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+cms_dimuon_13TEV: cms_dimuon_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_dimuon_13TEV.o: $(CMS13TEVDILEPTON)/cms_dimuon_13TEV.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 clean:
 	rm -rf $(ODIR)/*.o 
 	rm -rf *.o 
 	rm -rf ditauAtlas13tev
+	rm -rf cms_dielectron_13TEV
+	rm -rf cms_dimuon_13TEV
 
 # Phony targets
 .PHONY: clean
