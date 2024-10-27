@@ -22,10 +22,10 @@ $(ODIR)/%.o: src/%.cpp $(IDIR)/%.h | $(ODIR)
 # Specific targets for ATLAS analysis
 ATLAS13DITAUPATH = examples/DY/di-tau-ATLAS13TEV
 
-ditauAtlas13tev: ditauAtlas13tev.o $(OBJ) SelectionsATLAS-ditau.o
+atlas_ditauhad_13TEV: atlas_ditauhad_13TEV.o $(OBJ) SelectionsATLAS-ditau.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-ditauAtlas13tev.o: $(ATLAS13DITAUPATH)/ditauAtlas13tev.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
+atlas_ditauhad_13TEV.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_13TEV.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
