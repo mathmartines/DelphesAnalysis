@@ -21,14 +21,14 @@ void MuonCandidates::selectObjects(EventData* event_data) const {
     /// clear the vector that stores the muons
     event_data->getParticles("Muon").clear();
     /// checks all the muons
+    double pt = 0;
     const TClonesArray* branch_muons = event_data->getBranch("Muon");
     for (int iMuon = 0; iMuon < branch_muons->GetEntries(); iMuon++) {
         Muon* candidate = (Muon*) branch_muons->At(iMuon);
         /// kinematical cuts
-        if (candidate->PT > 53 && abs(candidate->Eta) < 2.4 )
+        if (candidate->PT > 53 && abs(candidate->Eta) < 2.4 && trackPtSumCheck(event_data, candidate))
             event_data->getParticles("Muon").push_back(candidate);
         // if (candidate->SumPtCharged < 0.1)
-            
     }
 }
 

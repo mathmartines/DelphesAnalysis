@@ -46,7 +46,7 @@ int main() {
     for (auto simulation: folders) { 
         cout << "Running on file " << simulation_folder + simulation << endl;
         /// adds the file for the analysis
-        event_loop.addFile(simulation_folder + simulation + "/delphes.root");
+        event_loop.addFile(simulation_folder + simulation + "/delphes_10.root");
         /// runs the analysis of the event
         long double efficiency = event_loop.run(&cms_analysis);
         /// reset the object for the next analysis
