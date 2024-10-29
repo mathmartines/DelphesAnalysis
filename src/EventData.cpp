@@ -32,6 +32,13 @@ void EventData::addParticlesVector(TString particles_name) {
     candidates[particles_name] = std::vector<EventData::Particles>();
 }
 
+void EventData::resetVectors() {
+    /// clear all vectors
+    for (auto& particlesVec: candidates)
+        particlesVec.second.clear();
+}
+
+
 void EventDataOld::setTree(std::shared_ptr<ExRootTreeReader> tree) {
     tree_reader = tree;
     /// link the branches ptrs to the tree
@@ -41,3 +48,4 @@ void EventDataOld::setTree(std::shared_ptr<ExRootTreeReader> tree) {
     branch_met = tree_reader->UseBranch("MissingET");
     branch_track = tree_reader->UseBranch("Track");
 }
+

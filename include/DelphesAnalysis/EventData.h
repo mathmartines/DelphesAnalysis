@@ -32,8 +32,11 @@ class EventData {
         /// @brief - returns a reference to the branch
         const TClonesArray* const &getBranch (TString branchname) const;
 
-         /// @brief - returns a reference to the particles vectors
+        /// @brief - returns a reference to the particles vectors
         std::vector<Particles> &getParticles (TString particles_name);
+
+        /// @brief - resets the particles vector
+        void resetVectors ();
         
         /// @brief - returns a vector with all the particles
         ///          this returns a copy of the vector, all the modifications made are not saved by the object

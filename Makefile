@@ -31,7 +31,7 @@ atlas_ditauhad_13TEV.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_13TEV.cpp $(DEPS) $(A
 SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
-# Specific targets for the CMS dielectron analysis
+# Specific targets for the CMS dilepton analysis
 CMS13TEVDILEPTON = examples/DY/cms-dilepton-13TEV
 
 cms_dielectron_13TEV: cms_dielectron_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
@@ -49,12 +49,31 @@ cms_dimuon_13TEV: cms_dimuon_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
 cms_dimuon_13TEV.o: $(CMS13TEVDILEPTON)/cms_dimuon_13TEV.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+# Specific targets for the CMS monolepton analysis
+CMS13TEVMONOLEPTON = examples/DY/cms-monolepton-13TEV
+
+cms_monoelectron_13TEV: cms_monoelectron_13TEV.o $(OBJ) SelectionsCMS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_monoelectron_13TEV.o: $(CMS13TEVMONOLEPTON)/cms_monoelectron_13TEV.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+cms_monomuon_13TEV: cms_monomuon_13TEV.o $(OBJ) SelectionsCMS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_monomuon_13TEV.o: $(CMS13TEVMONOLEPTON)/cms_monomuon_13TEV.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+SelectionsCMS_monolep.o: $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.cpp $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(DEPS)
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 clean:
 	rm -rf $(ODIR)/*.o 
 	rm -rf *.o 
 	rm -rf ditauAtlas13tev
 	rm -rf cms_dielectron_13TEV
 	rm -rf cms_dimuon_13TEV
+	rm -rf cms_monoelectron_13TEV
 
 # Phony targets
 .PHONY: clean
