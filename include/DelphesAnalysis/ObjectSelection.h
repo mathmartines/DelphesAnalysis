@@ -32,5 +32,41 @@ class AnalysisSelections: public ObjectSelection {
         std::vector<const ObjectSelection*> selectors;
 };
 
+/** 
+ *  @brief - Electron candidates
+ *           Selects electrons with pT > ptmin and |eta| < etamax, 
+ *           excluding the barrel-endcap transition region (1.37 < |eta| < 1.52)
+ **/
+class ElectronsOutBarrelEndcap: public ObjectSelection {
+    public:
+        ElectronsOutBarrelEndcap(double ptmin, double etamax): ptmin_(ptmin), etamax_(etamax) {};
+        void selectObjects(EventData* event_data) const override;
+    private:
+        double ptmin_, etamax_;
+};
+
+/**
+ * @brief - Muon candidates.
+ *          Selects muons with pt > ptmin and eta < etamax
+ */
+class MuonCandidates: public ObjectSelection {
+    public:
+        MuonCandidates(double ptmin, double etamax): etamax_(etamax), ptmin_(ptmin) {};
+        void selectObjects (EventData* event_data) const override;
+    private:
+        double etamax_, ptmin_;
+};
+
+/**
+ * @brief - Jet selection
+ *          Selects jets with pt > ptmin and |eta| < etamax
+ */
+class JetCandidates: public ObjectSelection {
+    public:
+        JetCandidates(double ptmin, double etamax): etamax_(etamax), ptmin_(ptmin) {};
+        void selectObjects (EventData* event_data) const override;
+    private:
+        double etamax_, ptmin_;
+};
 
 #endif

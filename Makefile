@@ -7,7 +7,7 @@ LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTre
 IDIR = include/DelphesAnalysis
 ODIR = lib
 
-_DEPS = EventData EventLoop Analysis Observable
+_DEPS = EventData EventLoop Analysis Observable ObjectSelection
 DEPS = $(patsubst %, $(IDIR)/%.h, $(_DEPS)) 
 OBJ = $(patsubst %, $(ODIR)/%.o, $(_DEPS))
 
@@ -67,6 +67,24 @@ cms_monomuon_13TEV.o: $(CMS13TEVMONOLEPTON)/cms_monomuon_13TEV.cpp $(DEPS) $(CMS
 SelectionsCMS_monolep.o: $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.cpp $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+# Specific targets for the ATLAS monolepton analysis
+ATLAS13TEVMONOLEP = examples/DY/atlas-monolepton-13TEV
+
+atlas_monoelectron_13TEV: atlas_monoelectron_13TEV.o $(OBJ) SelectionsATLAS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_monoelectron_13TEV.o: $(ATLAS13TEVMONOLEP)/atlas_monoelectron_13TEV.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+atlas_monomuon_13TEV: atlas_monomuon_13TEV.o $(OBJ) SelectionsATLAS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_monomuon_13TEV.o: $(ATLAS13TEVMONOLEP)/atlas_monomuon_13TEV.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+SelectionsATLAS_monolep.o: $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.cpp $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(DEPS)
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 clean:
 	rm -rf $(ODIR)/*.o 
 	rm -rf *.o 
@@ -74,6 +92,9 @@ clean:
 	rm -rf cms_dielectron_13TEV
 	rm -rf cms_dimuon_13TEV
 	rm -rf cms_monoelectron_13TEV
+	rm -rf cms_monomuon_13TEV
+	rm -rf atlas_monoelectron_13TEV
+	rm -rf atlas_monomuon_13TEV
 
 # Phony targets
 .PHONY: clean
