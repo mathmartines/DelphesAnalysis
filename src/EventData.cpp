@@ -23,6 +23,13 @@ std::vector<EventData::Particles> &EventData::getParticles(TString particles_nam
     return search->second;
 } 
 
+const std::vector<EventData::Particles> &EventData::getParticles(TString particles_name) const {
+    /// checks if the particles are in the array
+    auto search = candidates.find(particles_name);
+    if (search == candidates.end())
+        throw std::runtime_error("Asking acess for a key not in the particles vector map: " + particles_name);
+    return search->second;
+} 
 
 void EventData::addBranch(TString branch_name) {
     branches[branch_name] = tree_reader->UseBranch(branch_name);

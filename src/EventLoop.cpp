@@ -1,6 +1,6 @@
 #include "DelphesAnalysis/EventLoop.h"
 
-long double EventLoop::run(EventAnalysis* analysis, Distribution* distribution=nullptr) {
+long double EventLoop::run(EventAnalysis* analysis, std::shared_ptr<Distribution> distribution) {
     /// adds all the root files to the chain
     for (auto file: files)
         chain.Add(file);
@@ -16,12 +16,16 @@ long double EventLoop::run(EventAnalysis* analysis, Distribution* distribution=n
     
     /// launches the event loop
     for (int iEvent = 0; iEvent < tree_reader->GetEntries(); iEvent++) {
+        if (iEvent % 10000 == 0)
+            std::cout << "Reached event " << iEvent << std::endl;
         /// gets the information about the current event
         tree_reader->ReadEntry(iEvent);
         /// delegates the analysis of the event to the analysis object
-        if (analysis->processEvent(event_data)) passed_evts++; 
-        /// updating the distributions if needed
-        if (distribution) distribution->updateDistribution(event_data);
+        if (analysis->processEvent(event_data)) {
+            passed_evts++; 
+            /// updating the distributions if needed
+            if (distribution) distribution->updateDistribution(event_data);
+        }
     }
     std::cout << "Passed: " << passed_evts << "/" << tree_reader->GetEntries() << std::endl;
     return static_cast<long double>(passed_evts) / tree_reader->GetEntries();

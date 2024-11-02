@@ -12,7 +12,7 @@ using namespace std;
 
 int main() {
     /// particle selections for the ATLAS analysis
-    const ElectronCandidates electron_selection;
+    const ElectronCandidatesCMS electron_selection;
 
     /// all the cuts for the analysis
     const NumberOfElectrons dielectron_events(2);

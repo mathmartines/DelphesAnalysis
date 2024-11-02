@@ -31,4 +31,12 @@ double TransverseMassATLAS::evaluateObservable(const std::vector<TLorentzVector>
     return sqrt(2 * momentums[0].Pt() * momentums[1].Pt() * (1 - cos(delta_phi)));
 }
 
-
+double DielectronInvariantMass::evaluateObservable(const EventData* event_data) const {
+    /// acess the electrons in the event
+    EventData::ParticlesVector electrons = event_data->getParticles("Electron");
+    /// selected electrons
+    Electron* electron1 = EventData::getPtrToParticle<Electron>(electrons[0]);
+    Electron* electron2 = EventData::getPtrToParticle<Electron>(electrons[1]);
+    /// returns the invariant mass
+    return (electron1->P4() + electron2->P4()).M();
+}

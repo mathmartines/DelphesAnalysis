@@ -34,6 +34,7 @@ class EventData {
 
         /// @brief - returns a reference to the particles vectors
         std::vector<Particles> &getParticles (TString particles_name);
+        const std::vector<Particles> &getParticles (TString particles_name) const;
 
         /// @brief - resets the particles vector
         void resetVectors ();

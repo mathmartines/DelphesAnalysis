@@ -12,7 +12,7 @@
 
 /// @brief - Selects the electron candidates for the analysis
 ///        - pT > 35 GeV and |eta| < 1.44 or 1.57 < |eta| < 2.5
-class ElectronCandidates: public ObjectSelection {
+class ElectronCandidatesCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
@@ -20,7 +20,7 @@ class ElectronCandidates: public ObjectSelection {
 /// @brief - Selects the muon candidates for the analysis
 ///        - pT > 53 GeV and |eta| < 2.4
 ///        - The pt sum of all the tracks around a cone of Delta R = 0.3 has to be less than 10% of the muon momentum
-class MuonCandidates: public ObjectSelection {
+class MuonCandidatesCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
     private:

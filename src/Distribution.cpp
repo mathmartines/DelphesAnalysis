@@ -44,3 +44,11 @@ ObservableDistribution& ObservableDistribution::operator+=(const ObservableDistr
 
     return *this;
 }
+
+ObservableDistribution ObservableDistribution::operator+(const ObservableDistribution& dist) {
+    ObservableDistribution summed_dist (edges, observable);
+    for (int i = 0; i < number_of_evts.size(); i++) {
+        summed_dist[i] = number_of_evts[i] + dist[i];
+    }
+    return summed_dist;
+}

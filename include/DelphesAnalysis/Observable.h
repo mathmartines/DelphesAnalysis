@@ -4,7 +4,8 @@
 #include <vector>
 #include <math.h>
 #include "TLorentzVector.h"
-
+#include "classes/DelphesClasses.h"
+#include "DelphesAnalysis/EventData.h"
 
 class Observable {
     public:
@@ -44,6 +45,13 @@ class TransverseMassATLAS: public Observable {
 class EventObservable {
     public:
         virtual double evaluateObservable(const EventData* event_data) const = 0;
+};
+
+/// @brief - Evaluates the invariant mass for a pair of leptons
+class DielectronInvariantMass: public EventObservable {
+    public:
+        double evaluateObservable(const EventData* event_data) const override;
+
 };
 
 #endif

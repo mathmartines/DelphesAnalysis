@@ -1,6 +1,6 @@
 #include "SelectionsCMS_dilepton.h"
 
-void ElectronCandidates::selectObjects(EventData* event_data) const {
+void ElectronCandidatesCMS::selectObjects(EventData* event_data) const {
     /// clear the vector that stores the electrons
     event_data->getParticles("Electron").clear();
     /// acess the branch with the electrons
@@ -17,7 +17,7 @@ bool NumberOfElectrons::selectEvent(EventData* event_data) const {
     return event_data->getParticles("Electron").size() >= n;
 }
 
-void MuonCandidates::selectObjects(EventData* event_data) const {
+void MuonCandidatesCMS::selectObjects(EventData* event_data) const {
     /// clear the vector that stores the muons
     event_data->getParticles("Muon").clear();
     /// checks all the muons
@@ -32,7 +32,7 @@ void MuonCandidates::selectObjects(EventData* event_data) const {
     }
 }
 
-bool MuonCandidates::trackPtSumCheck(EventData* event_data, Muon* muon) const {
+bool MuonCandidatesCMS::trackPtSumCheck(EventData* event_data, Muon* muon) const {
     /// extracting the muon momentum
     const TLorentzVector muon_momentum = muon->P4();
     /// holds the track pt sum

@@ -43,6 +43,7 @@ class ObservableDistribution: public Distribution {
 
         /// @brief - sums the bin content
         ObservableDistribution& operator+=(const ObservableDistribution& dist);
+        ObservableDistribution operator+ (const ObservableDistribution& dist);
     
     private:
         std::vector<double> number_of_evts; /// total number of events 

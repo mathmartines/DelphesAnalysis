@@ -7,7 +7,7 @@ LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTre
 IDIR = include/DelphesAnalysis
 ODIR = lib
 
-_DEPS = EventData EventLoop EventAnalysis Observable ObjectSelection
+_DEPS = EventData EventLoop EventAnalysis Observable ObjectSelection Distribution
 DEPS = $(patsubst %, $(IDIR)/%.h, $(_DEPS)) 
 OBJ = $(patsubst %, $(ODIR)/%.o, $(_DEPS))
 
@@ -38,6 +38,12 @@ cms_dielectron_13TEV: cms_dielectron_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 cms_dielectron_13TEV.o: $(CMS13TEVDILEPTON)/cms_dielectron_13TEV.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+cms_dielectron_13TEV_eft_terms: cms_dielectron_13TEV_eft_terms.o $(OBJ) SelectionsCMS_dilepton.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_dielectron_13TEV_eft_terms.o: $(CMS13TEVDILEPTON)/cms_dielectron_13TEV_eft_terms.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 SelectionsCMS_dilepton.o: $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.cpp $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(DEPS)

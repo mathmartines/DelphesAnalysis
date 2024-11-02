@@ -1,4 +1,4 @@
-- overload operator + in Distribution;
+- overload operator + in ObservableDistribution class;
 - implement class DistributionsMap - map of ditributions;
 - implement EventObservable for the invariant mass of the electron and muon pair;
 - write the class to save the data into .yaml format
