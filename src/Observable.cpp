@@ -27,7 +27,6 @@ double InvariantMass::evaluateObservable(const std::vector<TLorentzVector>& mome
 }
 
 double TransverseMassATLAS::evaluateObservable(const std::vector<TLorentzVector>& momentums) const {
-    /// 
     double delta_phi = dphi.evaluateObservable(momentums);
     return sqrt(2 * momentums[0].Pt() * momentums[1].Pt() * (1 - cos(delta_phi)));
 }

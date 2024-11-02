@@ -7,7 +7,7 @@ LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTre
 IDIR = include/DelphesAnalysis
 ODIR = lib
 
-_DEPS = EventData EventLoop Analysis Observable ObjectSelection
+_DEPS = EventData EventLoop EventAnalysis Observable ObjectSelection
 DEPS = $(patsubst %, $(IDIR)/%.h, $(_DEPS)) 
 OBJ = $(patsubst %, $(ODIR)/%.o, $(_DEPS))
 

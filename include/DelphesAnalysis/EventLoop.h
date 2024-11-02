@@ -7,8 +7,9 @@
 #include "TChain.h"
 #include "TClonesArray.h"
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "DelphesAnalysis/EventData.h"
+#include "DelphesAnalysis/Distribution.h"
 
 /**
  * @class - Responsible to iterate over all events store in a TChain.
@@ -28,7 +29,7 @@ class EventLoop {
 
         /// @brief - runs the iteration over all the events in the file
         ///        - returns the efficiency
-        long double run(Analysis* analysis);
+        long double run(EventAnalysis* analysis, Distribution* dist=nullptr);
 
         /// @brief - resets the TChain for a different run
         void reset();

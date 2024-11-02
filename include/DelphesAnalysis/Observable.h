@@ -31,12 +31,19 @@ class InvariantMass: public Observable {
         double evaluateObservable(const std::vector<TLorentzVector>& momentums) const override;
 };
 
+/// @brief - Evaluates the transverse mass using the expression given by the ATLAS paper XXXX.XXX
 class TransverseMassATLAS: public Observable {
     public: 
         TransverseMassATLAS(): dphi(){};
         double evaluateObservable(const std::vector<TLorentzVector>& momentums) const override;
     private:
         const DeltaPhi dphi;
+};
+
+/// @brief - Evaluates a observable for a given event
+class EventObservable {
+    public:
+        virtual double evaluateObservable(const EventData* event_data) const = 0;
 };
 
 #endif

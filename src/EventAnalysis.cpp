@@ -1,6 +1,6 @@
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 
-bool Analysis::processEvent(EventData* event_data) const {
+bool EventAnalysis::processEvent(EventData* event_data) const {
     /// resets all vectors in event_data
     event_data->resetVectors();
     /// apply all the selections

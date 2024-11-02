@@ -3,7 +3,7 @@
 #include "TString.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataCMS_dilepton.h"
 #include "SelectionsCMS_dilepton.h"
 
@@ -25,7 +25,7 @@ int main() {
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
-    Analysis cms_analysis;
+    EventAnalysis cms_analysis;
     cms_analysis.setObjectSelection(&electron_selection);
     cms_analysis.setCuts(&dielectron_events);
 

@@ -1,2 +1,5 @@
-- implement Distribution class;
-- a lot of the cuts are shared by different analysis. create a share cut classes that can be easily reused
+- overload operator + in Distribution;
+- implement class DistributionsMap - map of ditributions;
+- implement EventObservable for the invariant mass of the electron and muon pair;
+- write the class to save the data into .yaml format
+- write the .cpp file to run the analysis

@@ -1,5 +1,5 @@
-#ifndef ANALYSIS_H
-#define ANALYSIS_H
+#ifndef EVENT_ANALYSIS_H
+#define EVENT_ANALYSIS_H
 
 #include "TString.h"
 #include "DelphesAnalysis/EventData.h"
@@ -9,7 +9,7 @@
 /// @brief - Defines the framework to run a analysis
 ///          The specifics about the analysis: cuts, particle selections, and 
 ///          which data must be store need to be provide by the subclasses             
-class Analysis {
+class EventAnalysis {
 
     public:
         /// @brief - applies all the selection cuts to the event
