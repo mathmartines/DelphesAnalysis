@@ -1,6 +1,7 @@
 #ifndef DISTRIBUTION_H
 #define DISTRIBUTION_H
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include "DelphesAnalysis/EventData.h"
@@ -19,6 +20,9 @@ class Distribution {
         /// @brief - rescale the distribution by a common factor
         virtual void rescaleDist(const double weight) = 0;
 
+        /// @brief - show number of events
+        virtual void displayNumberOfEvents() const = 0;
+
 };
 
 class ObservableDistribution: public Distribution {
@@ -33,6 +37,9 @@ class ObservableDistribution: public Distribution {
 
         /// @brief - rescale the distribution by a common factor
         void rescaleDist(const double weight) override;
+
+        /// @brief - display the number of events in the distribution
+        void displayNumberOfEvents() const override;
         
         /// @brief - returns the vector that holds the dist 
         const std::vector<double>& getBinsContent() const {return number_of_evts;};

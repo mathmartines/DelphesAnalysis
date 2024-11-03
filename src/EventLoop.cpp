@@ -27,6 +27,7 @@ long double EventLoop::run(EventAnalysis* analysis, std::shared_ptr<Distribution
             if (distribution) distribution->updateDistribution(event_data);
         }
     }
+    if (distribution) distribution->displayNumberOfEvents();
     std::cout << "Passed: " << passed_evts << "/" << tree_reader->GetEntries() << std::endl;
     return static_cast<long double>(passed_evts) / tree_reader->GetEntries();
 }

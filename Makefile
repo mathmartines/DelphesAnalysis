@@ -1,5 +1,5 @@
 CXX = g++
-CPPFLAGS = -I/opt/homebrew/Cellar/root/6.32.06/include/root -I/Users/martines/Desktop/Physics/delphes-master -I/Users/martines/Desktop/PhD/Programs/DelphesAnalysis/include
+CPPFLAGS = -I/opt/homebrew/Cellar/root/6.32.06/include/root -I/Users/martines/Desktop/Physics/delphes-master -I/Users/martines/Desktop/PhD/Programs/DelphesAnalysis/include -I/Users/martines/Desktop/PhD/Programs/DelphesAnalysis/external
 CXXFLAGS = -stdlib=libc++ -pthread -std=c++17 -m64 
 LDFLAGS = -L/opt/homebrew/Cellar/root/6.32.06/lib/root -L/Users/martines/Desktop/Physics/delphes-master -Wl,-rpath,/opt/homebrew/Cellar/root/6.32.06/lib/root -Wl,-rpath,/Users/martines/Desktop/Physics/delphes-master
 LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lMultiProc -lROOTDataFrame -lDelphes -stdlib=libc++ -lpthread -lm -ldl
@@ -7,7 +7,7 @@ LIBS = -lCore -lImt -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lROOTVecOps -lTre
 IDIR = include/DelphesAnalysis
 ODIR = lib
 
-_DEPS = EventData EventLoop EventAnalysis Observable ObjectSelection Distribution
+_DEPS = EventData EventLoop EventAnalysis Observable ObjectSelection Distribution Utilities
 DEPS = $(patsubst %, $(IDIR)/%.h, $(_DEPS)) 
 OBJ = $(patsubst %, $(ODIR)/%.o, $(_DEPS))
 
@@ -96,6 +96,7 @@ clean:
 	rm -rf *.o 
 	rm -rf ditauAtlas13tev
 	rm -rf cms_dielectron_13TEV
+	rm -rf cms_dielectron_13TEV_eft_terms
 	rm -rf cms_dimuon_13TEV
 	rm -rf cms_monoelectron_13TEV
 	rm -rf cms_monomuon_13TEV

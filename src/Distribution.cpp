@@ -52,3 +52,14 @@ ObservableDistribution ObservableDistribution::operator+(const ObservableDistrib
     }
     return summed_dist;
 }
+
+void ObservableDistribution::displayNumberOfEvents() const {
+    std::cout << "Number of events in each bin: ";
+    for (int i = 0; i < number_of_evts.size(); i++) {
+        if (i < number_of_evts.size() - 1)
+            std::cout << number_of_evts[i] << ", ";
+        else 
+            std::cout << number_of_evts[i];
+    }
+    std::cout << std::endl;
+}
