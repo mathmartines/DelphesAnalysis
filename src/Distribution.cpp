@@ -33,6 +33,11 @@ void ObservableDistribution::rescaleDist(const double weight) {
         number_of_evts[index] *= weight;
 }
 
+void ObservableDistribution::clear() {
+    for(int index = 0; index < number_of_evts.size(); index++)
+        number_of_evts[index] = 0;
+}
+
 ObservableDistribution& ObservableDistribution::operator+=(const ObservableDistribution& dist) {
     // checking if the number of bins is the same 
     if (number_of_evts.size() != dist.getBinsContent().size())

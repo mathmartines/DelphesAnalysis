@@ -40,6 +40,9 @@ class ObservableDistribution: public Distribution {
 
         /// @brief - display the number of events in the distribution
         void displayNumberOfEvents() const override;
+
+        /// @brief - set all bin values to zero
+        void clear ();
         
         /// @brief - returns the vector that holds the dist 
         const std::vector<double>& getBinsContent() const {return number_of_evts;};

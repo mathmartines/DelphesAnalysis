@@ -45,7 +45,11 @@ int main() {
     /// root to the folder
     string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dielectron-13TEV/UniversalSMEFT_d8/";
     /// all the masses
-    vector<string> eft_terms = {"SM"};
+    vector<string> eft_terms = {
+        "SM", 
+        "cphi1T", "D4FT", "cBWT", 
+        "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", "cBWT-cBWT"
+    };
 
     /// number of bins in the folder 
     int nbins = 29;
@@ -55,9 +59,10 @@ int main() {
 
     /// runs the analysis in all the simulations
     for (auto eft_term: eft_terms) {
+
         for (int bin_index = 1; bin_index <= nbins; bin_index++) {
             /// path to the root file
-            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes.root";
+            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events_final.root";
             /// path to the banner that stores the cross-section
             string bannerfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
 
@@ -76,6 +81,7 @@ int main() {
             cout << "Cross-section: " << xsection << endl;
 
             /// rescaling the result by the weight
+            /// number of events is not the same for all samples
             current_dist_ptr->rescaleDist(xsection * 1000. * 137. / 50000.);
 
             /// adds the content to the final distribution
@@ -88,6 +94,8 @@ int main() {
         invm_dist.displayNumberOfEvents();
         /// saving the distribution in the json object
         results_json[eft_term] = invm_dist.getBinsContent();
+        /// clear the distribution for the next term
+        invm_dist.clear();
     }
 
     // save json file
@@ -99,4 +107,4 @@ int main() {
     }
 
     return 0;
-}
+}   
