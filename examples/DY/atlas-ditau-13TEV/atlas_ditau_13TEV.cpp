@@ -3,7 +3,7 @@
 #include "TString.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataATLAS.h"
 #include "SelectionsATLAS-ditau.h"
 

@@ -20,59 +20,53 @@ using json = nlohmann::json;
 
 int main() {
     /// particle selections for the ATLAS analysis
-    const ElectronCandidatesCMS electron_selection;
+    const MuonCandidatesCMS muon_selections;
 
     /// all the cuts for the analysis
-    const NumberOfElectrons dielectron_events(2);
+    const NumberOfMuons dimuon_events(2);
+    const InvariantMassCut invariant_mass_muons;
+    const OppositeChargeCut opposite_charge;
+    const AngularDistanceCut angle_cut;
+    const AnalysisCuts cms_dimuon_cuts ({&dimuon_events, &opposite_charge, &angle_cut});
 
     /// default way to store the information about the event
-    EventDataCMS_dielectron event_data;
+    EventDataCMS_dimuon event_data;
 
     /// defining the observable for the distribution
-    // vector<double> bin_edges = {60, 120, 400, 600, 900, 1300, 1800, 13000};
     vector<double> bin_edges = {
-        60.0 , 95.0, 240.0, 260.0, 280.0, 300.0, 320.0, 340.0, 360.0, 380.0, 
-        400.0, 420.0, 440.0, 460.0, 480.0, 500.0, 520.0, 540.0, 
-        560.0, 580.0, 600.0, 630.0, 660.0, 690.0, 720.0, 750.0, 
-        780.0, 810.0, 840.0, 870.0, 900.0, 950.0, 1000.0, 1050.0, 
-        1100.0, 1150.0, 1200.0, 1250.0, 1310.0, 1370.0, 1430.0, 
-        1490.0, 1550.0, 1610.0, 1680.0, 1750.0, 1820.0, 1890.0, 
-        1970.0, 2050.0, 2130.0, 2210.0, 2290.0, 2370.0, 2450.0, 
-        2530.0, 2610.0, 2690.0, 2770.0, 2850.0, 2930.0, 3010.0, 
-        3090.0, 3170.0, 3250.0, 3330.0, 3410.0, 3490.0, 3570.0, 
-        3650.0, 3730.0, 3810.0, 3890.0, 3970.0, 4070.0, 4170.0, 
-        4270.0, 4370.0, 4470.0, 4570.0, 4670.0, 4770.0, 4870.0, 
-        4970.0, 5070.0, 5170.0, 5270.0, 5370.0, 5470.0, 5570.0, 
-        5670.0, 5770.0, 5870.0, 5970.0, 6070.0
+        120.0, 266.2, 288.3, 312.3, 338.2, 366.2, 396.6, 429.5, 465.1, 503.7, 545.5, 
+        590.7, 639.8, 692.8, 750.3, 812.5, 879.9, 952.9, 1032.0, 1117.6, 
+        1210.3, 1310.7, 1419.4, 1537.2, 1664.7, 1802.8, 1952.4, 2114.3, 2289.7, 
+        2479.7, 2685.4, 2908.1, 3149.4, 3410.7, 3693.6, 4000.0, 4500.0, 5200.0,
+        6000.0, 7000.0
     };
-    DielectronInvariantMass ee_invmass;
-    ObservableDistribution invm_dist (bin_edges, &ee_invmass);
 
-    /// handles the loop over all the event
+    DielectronInvariantMass invariant_mass;
+    ObservableDistribution invm_dist (bin_edges, &invariant_mass);
+
+    /// handles the loop over all the event 
     EventLoop event_loop;
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
     EventAnalysis cms_analysis;
-    cms_analysis.setObjectSelection(&electron_selection);
-    cms_analysis.setCuts(&dielectron_events);
+    cms_analysis.setObjectSelection(&muon_selections);
+    cms_analysis.setCuts(&cms_dimuon_cuts);
 
     /// root to the folder
     string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dielectron-13TEV/UniversalSMEFT_d8/";
     /// all the masses
     vector<string> eft_terms = {
-        // "SM", 
+        "SM", 
         // tilda variables
-        // "cphi1T", "D4FT", "cBWT", 
-        // "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", 
-        "cBWT-cBWT",
+        "cphi1T", "D4FT", "cBWT", 
+        "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", "cBWT-cBWT",
         // d6 coefficients
-        "c2JB", 
-        // "c2JW", "c2JB-c2JW", "c2JW-c2JW",
+        "c2JB", "c2JW", "c2JB-c2JW", "c2JW-c2JW",
         // d6 x renorm
-        // "c2JB-c2JWrenorm", "c2JB-cBW", "c2JB-cphi1", "c2JW-c2JWrenorm", "c2JW-cBW", "c2JW-cphi1",
+        "c2JB-c2JWrenorm", "c2JB-cBW", "c2JB-cphi1", "c2JW-c2JWrenorm", "c2JW-cBW", "c2JW-cphi1",
         // d8 terms
-        // "c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"
+        "c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"
     };
 
     // list of d8 coefficients
@@ -89,7 +83,7 @@ int main() {
 
         for (int bin_index = 1; bin_index <= nbins; bin_index++) {
             /// path to the root file
-            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events_final.root";
+            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events_final_muons.root";
             /// path to the banner that stores the cross-section
             string bannerfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
 
@@ -107,7 +101,7 @@ int main() {
             double xsection = read_weight(bannerfile);       
             cout << "Cross-section: " << xsection << endl;
             /// calculating the weight
-            double weight = xsection * 1000. * 137. / number_evts;
+            double weight = xsection * 1000. * 140. / number_evts;
             /// if it's a dim-8 coeff I need to add another 1/TeV^2 factor
             if (find(d8coefs.begin(), d8coefs.end(), eft_term) != d8coefs.end())
                 weight *= 1.0E-06;
@@ -130,7 +124,7 @@ int main() {
     }
 
     // save json file
-    ofstream file("cms-dielectron-13TEV-2.json");
+    ofstream file("cms-dimuon-13TEV.json");
     if (file.is_open()) {
         file << results_json.dump(4); // Pretty print with 4 spaces indentation
         file.close();

@@ -1,6 +1,6 @@
 #include "SelectionsCMS_monolep.h"
 
-void ElectronCandidates::selectObjects(EventData* event_data) const {
+void ElectronCandidatesCMS::selectObjects(EventData* event_data) const {
     /// acess the electrons branch
     const TClonesArray* electron_branch = event_data->getBranch("Electron");
     for (int iEle = 0; iEle < electron_branch->GetEntries(); iEle++) {
@@ -14,7 +14,7 @@ void ElectronCandidates::selectObjects(EventData* event_data) const {
     }
 }
 
-void MuonCandidates::selectObjects(EventData* event_data) const {
+void MuonCandidatesCMS::selectObjects(EventData* event_data) const {
     /// acess the muons branch
     const TClonesArray* muon_branch = event_data->getBranch("Muon");
     for (int iMuon = 0; iMuon < muon_branch->GetEntries(); iMuon++) {
@@ -28,7 +28,7 @@ void MuonCandidates::selectObjects(EventData* event_data) const {
     }
 }
 
-void Jets::selectObjects(EventData* event_data) const {
+void JetsCMS::selectObjects(EventData* event_data) const {
     /// acess the Jets branch
     const TClonesArray* jets_branch = event_data->getBranch("Jet");
     for (int iJet = 0; iJet < jets_branch->GetEntries(); iJet++) {
@@ -47,12 +47,14 @@ bool ElectronEvent::selectEvent(EventData* event_data) const {
     EventData::ParticlesVector& electrons = event_data->getParticles("Electron");
     if (electrons.size() < 1)
         return false;
+
     Electron* leading = EventData::getPtrToParticle<Electron>(electrons[0]);
+
     return leading->PT > 200;
 }
 
 bool MuonEvent::selectEvent (EventData* event_data) const {
-    EventData::ParticlesVector& muons = event_data->getParticles("Muon");
+    EventData::ParticlesVector& muons = event_data->getParticles("Electron");
     if (muons.size() < 1)
         return false;
     Muon* muon = EventData::getPtrToParticle<Muon>(muons[0]);
@@ -86,7 +88,7 @@ bool AdditionalLeptonsVeto::selectEvent(EventData* event_data) const {
 
 bool VetoOnJets::selectEvent(EventData* event_data) const {
     EventData::ParticlesVector& jets = event_data->getParticles("Jet");
-    Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
+    Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Electron")[0]);
     const TLorentzVector muon_momentum = muon->P4();
 
     /// holds the number of jets 
@@ -126,4 +128,4 @@ bool MissingETCuts::selectEvent(EventData* event_data) const {
     }
     double ptratio = leptonMomentum.Pt() / met->MET;
     return (ptratio > 0.4 && ptratio < 1.5) && abs(dphicalc.evaluateObservable({met_momentum, leptonMomentum})) > 2.5;
-}
+}   

@@ -4,7 +4,7 @@
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataCMS_monolep.h"
 #include "SelectionsCMS_monolep.h"
 
@@ -13,9 +13,9 @@ using namespace std;
 
 int main() {
     /// particle selections for the ATLAS analysis
-    const ElectronCandidates electron_cand;
-    const MuonCandidates muon_cand;
-    const Jets jets_cand;
+    const ElectronCandidatesCMS electron_cand;
+    const MuonCandidatesCMS muon_cand;
+    const JetsCMS jets_cand;
     AnalysisSelections cms_monolep_selections ({&electron_cand, &muon_cand, &jets_cand});
 
     /// all the cuts for the analysis
@@ -33,7 +33,7 @@ int main() {
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
-    Analysis cms_analysis;
+    EventAnalysis cms_analysis;
     cms_analysis.setObjectSelection(&cms_monolep_selections);
     cms_analysis.setCuts(&monoe_cuts);
 
@@ -55,7 +55,7 @@ int main() {
         /// adds the file for the analysis
         event_loop.addFile(simulation_folder + simulation + "/delphes.root");
         /// runs the analysis of the event
-        long double efficiency = event_loop.run(&cms_analysis);
+        int efficiency = event_loop.run(&cms_analysis);
         /// reset the object for the next analysis
         event_loop.reset();
         cout << setprecision(10) << "Efficiency " << efficiency << endl;

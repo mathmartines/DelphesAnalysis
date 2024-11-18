@@ -7,6 +7,7 @@
 #include "classes/DelphesClasses.h"
 #include "DelphesAnalysis/EventData.h"
 
+
 class Observable {
     public:
         Observable() = default;
@@ -52,6 +53,12 @@ class DielectronInvariantMass: public EventObservable {
     public:
         double evaluateObservable(const EventData* event_data) const override;
 
+};
+
+/// @brief - Evaluates the transvere mass for the monolepton events
+class TransverseMassEventObs: public EventObservable {
+    public:
+        double evaluateObservable(const EventData* event_data) const override;
 };
 
 #endif

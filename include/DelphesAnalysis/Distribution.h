@@ -27,7 +27,7 @@ class Distribution {
 
 class ObservableDistribution: public Distribution {
     public:
-        ObservableDistribution(std::vector<double> bin_edges, EventObservable* obs);
+        ObservableDistribution(std::vector<double> bin_edges, const EventObservable* obs);
 
         /// @brief - updates the distribution with the given event 
         void updateDistribution(const EventData* event_data) override;
@@ -58,7 +58,7 @@ class ObservableDistribution: public Distribution {
     private:
         std::vector<double> number_of_evts; /// total number of events 
         std::vector<double> edges; /// specify the bins of the distribution
-        EventObservable* observable; /// stores how the observable is calculated
+        const EventObservable* observable; /// stores how the observable is calculated
 
         /// @brief - finds the indice of the bin to be updated 
         ///        - returns the bin index or -1, which means that the value is outside of the distribution limit

@@ -29,7 +29,7 @@ class EventLoop {
 
         /// @brief - runs the iteration over all the events in the file
         ///        - returns the efficiency
-        long double run(EventAnalysis* analysis, std::shared_ptr<Distribution> dist=nullptr);
+        int run(EventAnalysis* analysis, std::shared_ptr<Distribution> dist=nullptr);
 
         /// @brief - resets the TChain for a different run
         void reset();

@@ -3,7 +3,7 @@
 #include "TString.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataCMS_dilepton.h"
 #include "SelectionsCMS_dilepton.h"
 
@@ -12,7 +12,7 @@ using namespace std;
 
 int main() {
     /// particle selections for the ATLAS analysis
-    const MuonCandidates muon_selection;
+    const MuonCandidatesCMS muon_selection;
 
     /// all the cuts for the analysis
     const NumberOfMuons dimuon_events(2);
@@ -20,7 +20,7 @@ int main() {
     const OppositeChargeCut opposite_charge;
     const AngularDistanceCut angle_cut;
 
-    const AnalysisCuts cms_dimuon_cuts ({&dimuon_events, &invariant_mass_muons, &opposite_charge, &angle_cut});
+    const AnalysisCuts cms_dimuon_cuts ({&dimuon_events, &opposite_charge, &angle_cut});
 
     /// default way to store the information about the event
     EventDataCMS_dimuon event_data;
@@ -30,7 +30,7 @@ int main() {
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
-    Analysis cms_analysis;
+    EventAnalysis cms_analysis;
     cms_analysis.setObjectSelection(&muon_selection);
     cms_analysis.setCuts(&cms_dimuon_cuts);
 

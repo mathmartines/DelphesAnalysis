@@ -19,20 +19,22 @@ bool NumberOfElectrons::selectEvent(EventData* event_data) const {
 
 void MuonCandidatesCMS::selectObjects(EventData* event_data) const {
     /// clear the vector that stores the muons
-    event_data->getParticles("Muon").clear();
+    // event_data->getParticles("Muon").clear();
+    event_data->getParticles("Electron").clear();
     /// checks all the muons
     double pt = 0;
-    const TClonesArray* branch_muons = event_data->getBranch("Muon");
+    // const TClonesArray* branch_muons = event_data->getBranch("Muon");
+    const TClonesArray* branch_muons = event_data->getBranch("Electron");
     for (int iMuon = 0; iMuon < branch_muons->GetEntries(); iMuon++) {
-        Muon* candidate = (Muon*) branch_muons->At(iMuon);
+        Electron* candidate = (Electron*) branch_muons->At(iMuon);
         /// kinematical cuts
-        if (candidate->PT > 53 && abs(candidate->Eta) < 2.4 && trackPtSumCheck(event_data, candidate))
-            event_data->getParticles("Muon").push_back(candidate);
+        if (candidate->PT > 53 && abs(candidate->Eta) < 2.4)
+            event_data->getParticles("Electron").push_back(candidate);
         // if (candidate->SumPtCharged < 0.1)
     }
 }
 
-bool MuonCandidatesCMS::trackPtSumCheck(EventData* event_data, Muon* muon) const {
+bool MuonCandidatesCMS::trackPtSumCheck(EventData* event_data, Electron* muon) const {
     /// extracting the muon momentum
     const TLorentzVector muon_momentum = muon->P4();
     /// holds the track pt sum
@@ -50,28 +52,28 @@ bool MuonCandidatesCMS::trackPtSumCheck(EventData* event_data, Muon* muon) const
 }
 
 bool NumberOfMuons::selectEvent(EventData* event_data) const {
-    return event_data->getParticles("Muon").size() >= n;
+    return event_data->getParticles("Electron").size() >= n;
 }
 
 bool InvariantMassCut::selectEvent(EventData* event_data) const {
     /// selecting the leading and subleading muons
-    Muon* leading = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
-    Muon* subleading = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[1]);
+    Electron* leading = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0]);
+    Electron* subleading = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[1]);
     /// calculates the invariant mass 
     return m.evaluateObservable({leading->P4(), subleading->P4()}) > 150;
 }
 
 bool OppositeChargeCut::selectEvent(EventData* event_data) const {
     /// selecting the leading and subleading muons
-    Muon* leading = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
-    Muon* subleading = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[1]);
+    Electron* leading = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0]);
+    Electron* subleading = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[1]);
     return leading->Charge == -subleading->Charge;
 }
 
 bool AngularDistanceCut::selectEvent(EventData* event_data) const { 
     /// selecting the leading and subleading muons
-    const TLorentzVector lead_momentum = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0])->P4();
-    const TLorentzVector sublead_momentum = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[1])->P4();
+    const TLorentzVector lead_momentum = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0])->P4();
+    const TLorentzVector sublead_momentum = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[1])->P4();
     // evaluates the cosine of the angle
     double cosAngle = scalarProduct(lead_momentum, sublead_momentum) / (norm(lead_momentum) * norm(sublead_momentum));
     /// minimum allowed value

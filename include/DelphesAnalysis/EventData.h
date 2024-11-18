@@ -46,7 +46,7 @@ class EventData {
 
         ///
         template<typename T>
-        static T* getPtrToParticle(Particles& particle);
+        static T* getPtrToParticle(const Particles& particle);
 
     protected:
         /// @brief - pointer to the tree object
@@ -66,7 +66,7 @@ class EventData {
 };
 
 template<typename T>
-T* EventData::getPtrToParticle(EventData::Particles& particle) {
+T* EventData::getPtrToParticle(const EventData::Particles& particle) {
     if (T* converted_particle = *std::get_if<T*>(&particle))
         return converted_particle;
     throw std::runtime_error("trying to extract particle from different type");

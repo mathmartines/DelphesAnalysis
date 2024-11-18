@@ -20,12 +20,18 @@ $(ODIR)/%.o: src/%.cpp $(IDIR)/%.h | $(ODIR)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 # Specific targets for ATLAS analysis
-ATLAS13DITAUPATH = examples/DY/di-tau-ATLAS13TEV
+ATLAS13DITAUPATH = examples/DY/atlas-ditau-13TEV
 
 atlas_ditauhad_13TEV: atlas_ditauhad_13TEV.o $(OBJ) SelectionsATLAS-ditau.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 atlas_ditauhad_13TEV.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_13TEV.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+atlas_ditauhad_bveto_13TEV: atlas_ditauhad_bveto_13TEV.o $(OBJ) SelectionsATLAS-ditau.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_ditauhad_bveto_13TEV.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_bveto_13TEV.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
@@ -46,13 +52,19 @@ cms_dielectron_13TEV_eft_terms: cms_dielectron_13TEV_eft_terms.o $(OBJ) Selectio
 cms_dielectron_13TEV_eft_terms.o: $(CMS13TEVDILEPTON)/cms_dielectron_13TEV_eft_terms.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
-SelectionsCMS_dilepton.o: $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.cpp $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(DEPS)
-	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
-
 cms_dimuon_13TEV: cms_dimuon_13TEV.o $(OBJ) SelectionsCMS_dilepton.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 cms_dimuon_13TEV.o: $(CMS13TEVDILEPTON)/cms_dimuon_13TEV.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+cms_dimuon_13TEV_eft_terms: cms_dimuon_13TEV_eft_terms.o $(OBJ) SelectionsCMS_dilepton.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_dimuon_13TEV_eft_terms.o: $(CMS13TEVDILEPTON)/cms_dimuon_13TEV_eft_terms.cpp $(DEPS) $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(CMS13TEVDILEPTON)/EventDataCMS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+SelectionsCMS_dilepton.o: $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.cpp $(CMS13TEVDILEPTON)/SelectionsCMS_dilepton.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 # Specific targets for the CMS monolepton analysis
@@ -64,10 +76,22 @@ cms_monoelectron_13TEV: cms_monoelectron_13TEV.o $(OBJ) SelectionsCMS_monolep.o
 cms_monoelectron_13TEV.o: $(CMS13TEVMONOLEPTON)/cms_monoelectron_13TEV.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+cms_monoelectron_13TEV_eft_terms: cms_monoelectron_13TEV_eft_terms.o $(OBJ) SelectionsCMS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_monoelectron_13TEV_eft_terms.o: $(CMS13TEVMONOLEPTON)/cms_monoelectron_13TEV_eft_terms.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 cms_monomuon_13TEV: cms_monomuon_13TEV.o $(OBJ) SelectionsCMS_monolep.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 cms_monomuon_13TEV.o: $(CMS13TEVMONOLEPTON)/cms_monomuon_13TEV.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+cms_monomuon_13TEV_eft_terms: cms_monomuon_13TEV_eft_terms.o $(OBJ) SelectionsCMS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+cms_monomuon_13TEV_eft_terms.o: $(CMS13TEVMONOLEPTON)/cms_monomuon_13TEV_eft_terms.cpp $(DEPS) $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(CMS13TEVMONOLEPTON)/EventDataCMS_monolep.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 SelectionsCMS_monolep.o: $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.cpp $(CMS13TEVMONOLEPTON)/SelectionsCMS_monolep.h $(DEPS)
@@ -95,11 +119,15 @@ clean:
 	rm -rf $(ODIR)/*.o 
 	rm -rf *.o 
 	rm -rf ditauAtlas13tev
+	rm -rf atlas_ditauhad_bveto_13TEV
 	rm -rf cms_dielectron_13TEV
 	rm -rf cms_dielectron_13TEV_eft_terms
+	rm -rf cms_dimuon_13TEV_eft_terms
 	rm -rf cms_dimuon_13TEV
 	rm -rf cms_monoelectron_13TEV
+	rm -rf cms_monoelectron_13TEV_eft_terms
 	rm -rf cms_monomuon_13TEV
+	rm -rf cms_monomuon_13TEV_eft_terms
 	rm -rf atlas_monoelectron_13TEV
 	rm -rf atlas_monomuon_13TEV
 

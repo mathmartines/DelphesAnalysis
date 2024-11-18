@@ -15,9 +15,10 @@ class EventDataCMS_dielectron: public EventData {
 class EventDataCMS_dimuon: public EventData {
     public:
         void setBranches () override {
-            addBranch("Muon");
+            // addBranch("Muon");
+            addBranch("Electron");
             addBranch("Track");
-            addParticlesVector("Muon");
+            addParticlesVector("Electron");
         };
 };
 

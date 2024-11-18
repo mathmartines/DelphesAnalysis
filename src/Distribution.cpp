@@ -1,6 +1,6 @@
 #include "DelphesAnalysis/Distribution.h"
 
-ObservableDistribution::ObservableDistribution(std::vector<double> bin_edges, EventObservable* obs): 
+ObservableDistribution::ObservableDistribution(std::vector<double> bin_edges, const EventObservable* obs): 
     edges(bin_edges), 
     observable(obs),
     number_of_evts(bin_edges.size() - 1, 0) {}

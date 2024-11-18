@@ -12,20 +12,20 @@
 /// @brief - Et > 35 GeV
 ///        - |eta| < 1.4 or 1.57 < |eta| < 2.5
 ///        - the Et sum in the calorimeter must be less than 3% of the lepton Et
-class ElectronCandidates: public ObjectSelection {
+class ElectronCandidatesCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
 
 /// @brief - |eta| < 2.4
 ///        - the sum scalar sum of the tracks must be less than 10% of the muon pt
-class MuonCandidates: public ObjectSelection {
+class MuonCandidatesCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
 
 /// @brief - pT > 25 and |eta| < 2.5
-class Jets: public ObjectSelection {
+class JetsCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;  
 };

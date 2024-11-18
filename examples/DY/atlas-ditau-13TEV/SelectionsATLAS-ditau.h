@@ -16,19 +16,19 @@
 /// ------------------------- Particle Selections -------------------------
 
 /// @brief - Electrons candidates must have |eta| < 2.47 and not within 1.37 < |eta| < 1.52
-class ElectronCandidates: public ObjectSelection {
+class ElectronCandidatesATLAS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
 
 /// @brief - Muon candidates must have |eta| < 2.5
-class MuonCandidates: public ObjectSelection {
+class MuonCandidatesATLAS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
 
 /// @brief - Jets must have pT > 20 and |eta| < 2.5
-class Jets: public ObjectSelection {
+class JetsATLAS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
@@ -110,20 +110,25 @@ class LeptonPtCut: public Cut{
 ///          checks if the lepton and hadronic tau are back to back
 ///          checks if the transverse mass of the missing energy and lepton is less than 40GeV
 ///          checks if the invariant mass of the hadronic tau and lepton is not inside the Z mass window
-class TauLeptonEventsCuts: public Cut {
-    public: 
-        TauLeptonEventsCuts(): delta_phi(), mt(), mtatlas(), m() {};
-        bool selectEvent(EventData* event_data) const override;
+// class TauLeptonEventsCuts: public Cut {
+//     public: 
+//         TauLeptonEventsCuts(): delta_phi(), mt(), mtatlas(), m() {};
+//         bool selectEvent(EventData* event_data) const override;
     
-    private:
-        /// @brief - checks if there's a tau with |eta| < 2.3 with opposite electric charge of the lepton 
-        bool oppositeChargeHadTau(EventData* event_data, int lepton_charge) const; 
-        /// @brief - calculates the observables
-        const DeltaPhi delta_phi;
-        const TransverseMass mt;
-        const TransverseMassATLAS mtatlas;
-        const InvariantMass m;
-};
+//     private:
+//         /// @brief - checks if there's a tau with |eta| < 2.3 with opposite electric charge of the lepton 
+//         bool oppositeChargeHadTau(EventData* event_data, int lepton_charge) const; 
+//         /// @brief - calculates the observables
+//         const DeltaPhi delta_phi;
+//         const TransverseMass mt;
+//         const TransverseMassATLAS mtatlas;
+//         const InvariantMass m;
+// };
 
+/// @brief Defining the observable
+class TransverseMassDiTauHad: public EventObservable {
+    public:
+        double evaluateObservable(const EventData* event_data) const override;
+};
 
 #endif

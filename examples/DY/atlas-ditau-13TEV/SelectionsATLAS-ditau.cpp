@@ -1,10 +1,8 @@
 #include "SelectionsATLAS-ditau.h"
 
 
-void ElectronCandidates::selectObjects(EventData* event_data) const {
-    /// clear the electrons vector for the event
+void ElectronCandidatesATLAS::selectObjects(EventData* event_data) const {
     EventData::ParticlesVector& electrons = event_data->getParticles("Electron");
-    electrons.clear();
     /// only electrons with |eta| < 2.47 and not with in 1.37 < |eta| < 1.52
     const TClonesArray* branch_electrons = event_data->getBranch("Electron");
     for (int i = 0; i < branch_electrons->GetEntries(); i++) {
@@ -14,10 +12,8 @@ void ElectronCandidates::selectObjects(EventData* event_data) const {
     }
 }
 
-void MuonCandidates::selectObjects(EventData* event_data) const {
-    /// clear the muon vector for the analysis
+void MuonCandidatesATLAS::selectObjects(EventData* event_data) const {
     EventData::ParticlesVector& muons = event_data->getParticles("Muon");
-    muons.clear();
     /// only electrons with |eta| < 2.5
     const TClonesArray* branch_muons = event_data->getBranch("Muon");
     for (int i = 0; i < branch_muons->GetEntries(); i++) {
@@ -27,7 +23,7 @@ void MuonCandidates::selectObjects(EventData* event_data) const {
     }
 }
 
-void Jets::selectObjects(EventData* event_data) const {
+void JetsATLAS::selectObjects(EventData* event_data) const {
     /// clear the jets vector for the analysis
     EventData::ParticlesVector& jets = event_data->getParticles("Jet");
     jets.clear();
@@ -41,10 +37,7 @@ void Jets::selectObjects(EventData* event_data) const {
 }
 
 void HadronicTaus::selectObjects(EventData* event_data) const {
-    /// clear the vector that stores the hadronic taus
     EventData::ParticlesVector& hadronic_taus = event_data->getParticles("HadronicTau");
-    hadronic_taus.clear();
-
     /// we extract the hadronic taus from the jets
     EventData::ParticlesVector& jets = event_data->getParticles("Jet");
     for (auto& jet_: jets) {
@@ -96,7 +89,7 @@ bool HadronicTausCut::selectEvent(EventData* event_data) const {
     EventData::ParticlesVector& taus = event_data->getParticles("HadronicTau");
     Jet* leading_jet = EventData::getPtrToParticle<Jet>(taus[0]);
     /// leading jet pT cut
-    if (leading_jet->PT < 130)
+    if (leading_jet->PT < 85)
         return false;
     /// opposite charge check 
     if(!oppositeCharge(event_data))
@@ -170,52 +163,79 @@ bool LeptonPtCut::selectEvent(EventData* event_data) const {
 }
 
 
-bool TauLeptonEventsCuts::selectEvent(EventData* event_data) const {
-    // lepton charge and momentum
-    int lepton_charge;
-    TLorentzVector lepton_momentum;
+// bool TauLeptonEventsCuts::selectEvent(EventData* event_data) const {
+//     // lepton charge and momentum
+//     int lepton_charge;
+//     TLorentzVector lepton_momentum;
 
-    /// saves the momentum and the charge of the lepton
-    if (event_data->getParticles("Electron").size() == 1) {
-        Electron* electron = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0]);
-        lepton_charge = electron->Charge;
-        lepton_momentum = electron->P4();
-    }
-    else {
-        Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
-        lepton_charge = muon->Charge;
-        lepton_momentum = muon->P4();
-    }
-    // checks if a hadronic tau with opposite charge is found
-    if (!oppositeChargeHadTau(event_data, lepton_charge))
-        return false;
-    /// gets the hadronic tau
-    Jet* tau = EventData::getPtrToParticle<Jet>(event_data->getParticles("HadronicTau")[0]);
-    /// checking if they are back to back
-    if (abs(delta_phi.evaluateObservable({lepton_momentum, tau->P4()})) <= 2.4)
-        return false;
-    /// getting the missing energy 
-    const TClonesArray* branchMET = event_data->getBranch("MissingET");
-    MissingET* met = (MissingET*) branchMET->At(0);
-    TLorentzVector met_momentum;
-    met_momentum.SetPtEtaPhiM(met->MET, met->Eta, met->Phi, 0);
-    if (mtatlas.evaluateObservable({lepton_momentum, met_momentum}) >= 40)
-        return false;
-    /// invariant mass for lepton + tau
-    double invmass = m.evaluateObservable({lepton_momentum, tau->P4()});
-    /// removing Z mass window
-    return invmass < 80 || invmass > 110;
-}
+//     /// saves the momentum and the charge of the lepton
+//     if (event_data->getParticles("Electron").size() == 1) {
+//         Electron* electron = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0]);
+//         lepton_charge = electron->Charge;
+//         lepton_momentum = electron->P4();
+//     }
+//     else {
+//         Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
+//         lepton_charge = muon->Charge;
+//         lepton_momentum = muon->P4();
+//     }
+//     // checks if a hadronic tau with opposite charge is found
+//     if (!oppositeChargeHadTau(event_data, lepton_charge))
+//         return false;
+//     /// gets the hadronic tau
+//     Jet* tau = EventData::getPtrToParticle<Jet>(event_data->getParticles("HadronicTau")[0]);
+//     /// checking if they are back to back
+//     if (abs(delta_phi.evaluateObservable({lepton_momentum, tau->P4()})) <= 2.4)
+//         return false;
+//     /// getting the missing energy 
+//     const TClonesArray* branchMET = event_data->getBranch("MissingET");
+//     MissingET* met = (MissingET*) branchMET->At(0);
+//     TLorentzVector met_momentum;
+//     met_momentum.SetPtEtaPhiM(met->MET, met->Eta, met->Phi, 0);
+//     if (mtatlas.evaluateObservable({lepton_momentum, met_momentum}) >= 40)
+//         return false;
+//     /// invariant mass for lepton + tau
+//     double invmass = m.evaluateObservable({lepton_momentum, tau->P4()});
+//     /// removing Z mass window
+//     return invmass < 80 || invmass > 110;
+// }
 
-bool TauLeptonEventsCuts::oppositeChargeHadTau(EventData* event_data, int lepton_charge) const {
-    EventData::ParticlesVector& taus = event_data->getParticles("HadronicTau");
-    for (auto& tau_ref: taus) {
-        Jet* tau = EventData::getPtrToParticle<Jet>(tau_ref);
-        if (tau->Charge == -lepton_charge && abs(tau->Eta) < 2.3) {
-            /// updates the first entry to store the selected tau
-            event_data->getParticles("HadronicTau")[0] = tau;
-            return true;
-        }
-    }
-    return false;
+// bool TauLeptonEventsCuts::oppositeChargeHadTau(EventData* event_data, int lepton_charge) const {
+//     EventData::ParticlesVector& taus = event_data->getParticles("HadronicTau");
+//     for (auto& tau_ref: taus) {
+//         Jet* tau = EventData::getPtrToParticle<Jet>(tau_ref);
+//         if (tau->Charge == -lepton_charge && abs(tau->Eta) < 2.3) {
+//             /// updates the first entry to store the selected tau
+//             event_data->getParticles("HadronicTau")[0] = tau;
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+double TransverseMassDiTauHad::evaluateObservable(const EventData* event_data) const {
+    /// hadronic taus
+    const EventData::ParticlesVector& hadronic_taus = event_data->getParticles("HadronicTau");
+
+    /// leading and subleading taus
+    Jet* tau_had1 = EventData::getPtrToParticle<Jet> (hadronic_taus[0]);
+    Jet* tau_had2 = EventData::getPtrToParticle<Jet> (hadronic_taus[1]);
+
+    /// Missing energy
+    MissingET* met = (MissingET*) event_data->getBranch("MissingET")->At(0);
+
+    /// Four vectors
+    const TLorentzVector& met_fv = met->P4();
+    const TLorentzVector& tauhad1_fv = tau_had1->P4();
+    const TLorentzVector& tauhad2_fv = tau_had2->P4();
+
+    /// pt sum
+    double ptsum = tau_had1->PT + tau_had2->PT + met->MET;
+
+    /// sum of the components
+    double px = tauhad1_fv.Px() + tauhad2_fv.Px() + met_fv.Px();
+    double py = tauhad1_fv.Py() + tauhad2_fv.Py() + met_fv.Py();
+
+    /// transverse mass
+    return sqrt(pow(ptsum, 2) - pow(px, 2) - pow(py, 2));
 }

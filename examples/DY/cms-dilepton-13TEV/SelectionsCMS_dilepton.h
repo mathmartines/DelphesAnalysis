@@ -25,7 +25,7 @@ class MuonCandidatesCMS: public ObjectSelection {
         void selectObjects(EventData* event_data) const override;
     private:
         /// @brief - checks if the pt sum of the track is less than 10% of the muon momentum 
-        bool trackPtSumCheck(EventData* event_data, Muon* muon) const;
+        bool trackPtSumCheck(EventData* event_data, Electron* muon) const;
 };
 
 /// @brief - Selects events only with the number of electrons >= n
