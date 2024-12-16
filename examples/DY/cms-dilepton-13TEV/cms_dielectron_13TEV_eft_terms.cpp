@@ -19,17 +19,19 @@ using json = nlohmann::json;
 
 
 int main() {
-    /// particle selections for the ATLAS analysis
+    /// Particle candidates for the analysis
     const ElectronCandidatesCMS electron_selection;
+    const AnalysisSelections cms_dielectron_selections ({&electron_selection});
 
     /// all the cuts for the analysis
     const NumberOfElectrons dielectron_events(2);
+    const ElectronInBarrel barrel_region_electron;
+    const AnalysisCuts dielectron_cuts ({&dielectron_events, &barrel_region_electron});
 
     /// default way to store the information about the event
-    EventDataCMS_dielectron event_data;
+    EventDataCMS event_data;
 
     /// defining the observable for the distribution
-    // vector<double> bin_edges = {60, 120, 400, 600, 900, 1300, 1800, 13000};
     vector<double> bin_edges = {
         60.0 , 95.0, 240.0, 260.0, 280.0, 300.0, 320.0, 340.0, 360.0, 380.0, 
         400.0, 420.0, 440.0, 460.0, 480.0, 500.0, 520.0, 540.0, 
@@ -54,32 +56,17 @@ int main() {
 
     /// handles the event analysis
     EventAnalysis cms_analysis;
-    cms_analysis.setObjectSelection(&electron_selection);
-    cms_analysis.setCuts(&dielectron_events);
+    cms_analysis.setObjectSelection(&cms_dielectron_selections);
+    cms_analysis.setCuts(&dielectron_cuts);
 
     /// root to the folder
-    string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dielectron-13TEV/UniversalSMEFT_d8/";
+    string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dielectron-13TEV/";
     /// all the masses
     vector<string> eft_terms = {
-        // "SM", 
-        // tilda variables
-        // "cphi1T", "D4FT", "cBWT", 
-        // "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", 
-        "cBWT-cBWT",
-        // d6 coefficients
-        "c2JB", 
-        // "c2JW", "c2JB-c2JW", "c2JW-c2JW",
-        // d6 x renorm
-        // "c2JB-c2JWrenorm", "c2JB-cBW", "c2JB-cphi1", "c2JW-c2JWrenorm", "c2JW-cBW", "c2JW-cphi1",
-        // d8 terms
-        // "c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"
+        "SM", "cphi1T", "cBWT", "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", "cBWT-cBWT",
+        "c2JB", "c2JW", "c2JB-c2JB", "c2JB-c2JW", "c2JW-c2JW", "c2JB-cphi1", "c2JB-cBW", "c2JW-cphi1", "c2JW-cBW",
+        "c7psi4H2", "c2psi4D2", "c3psi4D2", "c1psi2H2D3", "c2psi2H2D3"
     };
-
-    // list of d8 coefficients
-    vector<string> d8coefs = {"c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"};
-
-    /// number of bins in the folder 
-    int nbins = 29;
 
     // json file to store the output of the simulations
     json results_json;
@@ -87,11 +74,11 @@ int main() {
     /// runs the analysis in all the simulations
     for (auto eft_term: eft_terms) {
 
-        for (int bin_index = 1; bin_index <= nbins; bin_index++) {
+        for (int bin_index = 1; bin_index <= 9; bin_index++) {
             /// path to the root file
-            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events_final.root";
+            TString rootfile = simulation_folder + "root_files/cms-dielectron-" + eft_term + "-" + to_string(bin_index) + ".root";
             /// path to the banner that stores the cross-section
-            string bannerfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
+            string bannerfile = simulation_folder + "lhe_files/cms-dielectron-" + eft_term + "-" + to_string(bin_index) + ".lhe";
 
             cout << "Analysing file " << rootfile << endl;
 
@@ -103,14 +90,14 @@ int main() {
 
             /// run the event analysis
             int number_evts = event_loop.run(&cms_analysis, current_dist_ptr);
+           
             /// reading the cross-section
             double xsection = read_weight(bannerfile);       
             cout << "Cross-section: " << xsection << endl;
+           
             /// calculating the weight
             double weight = xsection * 1000. * 137. / number_evts;
-            /// if it's a dim-8 coeff I need to add another 1/TeV^2 factor
-            if (find(d8coefs.begin(), d8coefs.end(), eft_term) != d8coefs.end())
-                weight *= 1.0E-06;
+           
             /// rescaling the result by the weight
             /// number of events is not the same for all samples
             current_dist_ptr->rescaleDist(weight);
@@ -130,7 +117,7 @@ int main() {
     }
 
     // save json file
-    ofstream file("cms-dielectron-13TEV-2.json");
+    ofstream file("cms-dielectron-13TEV.json");
     if (file.is_open()) {
         file << results_json.dump(4); // Pretty print with 4 spaces indentation
         file.close();

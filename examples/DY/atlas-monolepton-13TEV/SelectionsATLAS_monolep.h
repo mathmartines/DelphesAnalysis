@@ -7,12 +7,42 @@
 #include "DelphesAnalysis/Cut.h"
 #include "DelphesAnalysis/Observable.h"
 
+
+
+/**
+ * @brief - Electrons candidates for the analysis
+ *        - |eta| < 2.47 and not in 1.37 < |eta| < 1.52
+ *        - pT > 65 GeV
+ *        - |D0|/sigmaD0 < 5
+ */
+class ElectronCandidatesATLAS: public ObjectSelection {
+    public:
+        void selectObjects(EventData* event_data) const override;
+};
+
+/**
+ * @brief - Muon candidates for the analysis
+ *        - |eta| < 2.5
+ *        - pT > 55 GeV
+ *        - |D0|/sigmaD0 < 3 and |z0| sin theta < 0.55
+ * 
+ */
+class MuonCandidatesATLAS: public ObjectSelection {
+    public:
+        void selectObjects (EventData* event_data) const override;
+    
+    private:
+        /// @brief - Checks if the muon is isolated
+        ///          Returns true if the muon is isolated and false otherwise
+        bool checkIsolation (const Muon* Muon, const EventData* event_data) const;
+};
+
 /**
  * @brief - Selects jets 
  *          pT > 20 GeV if |eta| < 2.4
  *          pT > 30 GeV if |eta| >= 2.4
  */
-class JetSelectionsATLAS_monolep: public ObjectSelection {
+class JetCandidatesATLAS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
 };
@@ -67,12 +97,11 @@ class MissingETCut: public Cut {
  */
 class TransverseMassCut: public Cut {
     public:
-        TransverseMassCut(double mtmin, bool eleEvt): mtmin_(mtmin), mtcalc(), electronevt(eleEvt) {};
+        TransverseMassCut(double mtmin, bool eleEvt): mtmin_(mtmin), electronevt(eleEvt) {};
         bool selectEvent (EventData* event_data) const override;
     private:
         double mtmin_;
         bool electronevt;
-        const TransverseMassATLAS mtcalc;
 };
 
 #endif

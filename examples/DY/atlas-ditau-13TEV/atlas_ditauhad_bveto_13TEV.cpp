@@ -16,6 +16,16 @@
 using namespace std;
 using json = nlohmann::json;
 
+double correction_factor(string subfolder) {
+    /// find the / caracther
+    size_t pos = subfolder.find("/");
+    /// eft term
+    string eft_term = subfolder.substr(pos);
+    /// returns the corrected factor
+    if (eft_term.find("-") != string::npos)
+        return 1.0e12;
+    return 1.0e6;
+}
 
 int main () {
     /// Particle selections for the ATLAS analysis
@@ -54,7 +64,29 @@ int main () {
     /// @todo - INCLUDE THE OTHER FOLDERS
     /// Maps with all the simulations root folders
     map<string, string> simulations {
-        {"bbbar_reg-reg", "bbbar_reg-reg/C1lq-C1lq/"}
+        {"uubar_int-gamma", "uubar_int-gamma/C1lq"},
+        {"uubar_reg-reg", "uubar_reg-reg/C1lq-C1lq"},
+        {"bdbar_reg-reg", "bdbar_reg-reg/C1lq-C1lq"},
+        {"ssbar_reg-reg", "ssbar_reg-reg/C1lq-C1lq"},
+        {"sdbar_reg-reg", "sdbar_reg-reg/C1lq-C1lq"},
+        {"sbbar_reg-reg", "sbbar_reg-reg/C1lq-C1lq"},
+        {"bbbar_reg-reg", "bbbar_reg-reg/C1lq-C1lq"},
+        {"uubar_int-Z", "uubar_int-Z/C1lq"},
+        {"dbbar_reg-reg", "dbbar_reg-reg/C1lq-C1lq"},
+        {"bbbar_int-Z", "bbbar_int-Z/C1lq"},
+        {"ccbar_int-Z", "ccbar_int-Z/C1lq"},
+        {"ddbar_int-gamma", "ddbar_int-gamma/C1lq"},
+        {"ddbar_int-Z", "ddbar_int-Z/C1lq"},
+        {"bsbar_reg-reg", "bsbar_reg-reg/C1lq-C1lq"},
+        {"ccbar_reg-reg", "ccbar_reg-reg/C1lq-C1lq"},
+        {"ccbar_int-gamma", "ccbar_int-gamma/C1lq"},
+        {"ssbar_int-Z", "ssbar_int-Z/C1lq"},
+        {"ddbar_reg-reg", "ddbar_reg-reg/C1lq-C1lq"},
+        {"bbbar_int-gamma", "bbbar_int-gamma/C1lq"},
+        {"ssbar_int-gamma", "ssbar_int-gamma/C1lq"},
+        {"dsbar_reg-reg", "dsbar_reg-reg/C1lq-C1lq"},
+        {"ucbar_reg-reg", "ucbar_reg-reg/C1lq-C1lq"},
+        {"cubar_reg-reg", "cubar_reg-reg/C1lq-C1lq"}
     };
 
     /// @todo - CORRECT THE CROSS-SECTIONS - create a map for it or a function 
@@ -69,18 +101,21 @@ int main () {
 
         /// vector to store the efficiencies
         vector<vector<double>> eff;
-
+    
         /// vector to store the cross-sections
         vector<double> xsecs;
+
+        /// correction factor for the cross-section (I defined the coeff with value of 1e-6 which is not needed)
+        double corr = correction_factor(subfolder);
         
         /// iterates over all the bins to get the efficiencies
         for (int bin_index = 1; bin_index <= nbins; bin_index++) {
 
             /// Path to the .root file 
-            TString root_file = simulations_folders + subfolder + "bin_" + to_string(bin_index) + "/Events/run_01/delphes_events.root";
+            TString root_file = simulations_folders + subfolder + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events.root";
 
             /// path to the banner that stores the cross-section
-            string bannerfile = simulations_folders + subfolder + "bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
+            string bannerfile = simulations_folders + subfolder + "/bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
 
             cout << endl << "Analysing file " << root_file << endl;
 
@@ -91,7 +126,7 @@ int main () {
             int number_of_evts = event_loop.run(&atlas_analysis, transverse_mass_dist);
 
             /// reading the cross-section
-            double xsection = read_weight(bannerfile);    
+            double xsection = read_weight(bannerfile) * corr;    
 
             cout << "sigma (pb): " << xsection << endl;
 
@@ -120,5 +155,6 @@ int main () {
             cout << "JSON file created successfully!" << std::endl;
         }
     }
+
     return 0;
 }

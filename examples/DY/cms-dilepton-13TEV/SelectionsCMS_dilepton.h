@@ -15,6 +15,9 @@
 class ElectronCandidatesCMS: public ObjectSelection {
     public:
         void selectObjects(EventData* event_data) const override;
+
+    private:
+        bool trackIsolation (const Electron* electron, const EventData* events_data) const;
 };
 
 /// @brief - Selects the muon candidates for the analysis
@@ -25,7 +28,7 @@ class MuonCandidatesCMS: public ObjectSelection {
         void selectObjects(EventData* event_data) const override;
     private:
         /// @brief - checks if the pt sum of the track is less than 10% of the muon momentum 
-        bool trackPtSumCheck(EventData* event_data, Electron* muon) const;
+        bool trackPtSumCheck(EventData* event_data, Muon* muon) const;
 };
 
 /// @brief - Selects events only with the number of electrons >= n
@@ -36,6 +39,12 @@ class NumberOfElectrons: public Cut {
     private:
         /// @brief - stores the minimum number of electrons required in the event
         int n;
+};
+
+/// @brief - Requires one electron in the barrel region
+class ElectronInBarrel: public Cut {
+    public:
+        bool selectEvent (EventData* event_data) const override;
 };
 
 /// @brief - Selects events only with the number of muons >= n

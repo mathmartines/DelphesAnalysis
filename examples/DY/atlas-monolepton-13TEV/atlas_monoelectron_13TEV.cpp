@@ -4,7 +4,7 @@
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataATLAS_monolep.h"
 #include "SelectionsATLAS_monolep.h"
 
@@ -32,7 +32,7 @@ int main() {
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
-    Analysis atlas_analysis;
+    EventAnalysis atlas_analysis;
     atlas_analysis.setObjectSelection(&atlas_selections);
     atlas_analysis.setCuts(&monoe_cuts);
 

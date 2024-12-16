@@ -34,6 +34,18 @@ atlas_ditauhad_bveto_13TEV: atlas_ditauhad_bveto_13TEV.o $(OBJ) SelectionsATLAS-
 atlas_ditauhad_bveto_13TEV.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_bveto_13TEV.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+atlas_ditauhad_bveto_13TEV_eft_terms: atlas_ditauhad_bveto_13TEV_eft_terms.o $(OBJ) SelectionsATLAS-ditau.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_ditauhad_bveto_13TEV_eft_terms.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_bveto_13TEV_eft_terms.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+atlas_ditauhad_bveto_13TEV_leptoquark: atlas_ditauhad_bveto_13TEV_leptoquark.o $(OBJ) SelectionsATLAS-ditau.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_ditauhad_bveto_13TEV_leptoquark.o: $(ATLAS13DITAUPATH)/atlas_ditauhad_bveto_13TEV_leptoquark.cpp $(DEPS) $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(ATLAS13DITAUPATH)/EventDataATLAS.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 SelectionsATLAS-ditau.o: $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.cpp $(ATLAS13DITAUPATH)/SelectionsATLAS-ditau.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
@@ -106,13 +118,37 @@ atlas_monoelectron_13TEV: atlas_monoelectron_13TEV.o $(OBJ) SelectionsATLAS_mono
 atlas_monoelectron_13TEV.o: $(ATLAS13TEVMONOLEP)/atlas_monoelectron_13TEV.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+atlas_monoelectron_13TEV_eft_terms: atlas_monoelectron_13TEV_eft_terms.o $(OBJ) SelectionsATLAS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_monoelectron_13TEV_eft_terms.o: $(ATLAS13TEVMONOLEP)/atlas_monoelectron_13TEV_eft_terms.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 atlas_monomuon_13TEV: atlas_monomuon_13TEV.o $(OBJ) SelectionsATLAS_monolep.o
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 atlas_monomuon_13TEV.o: $(ATLAS13TEVMONOLEP)/atlas_monomuon_13TEV.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
+atlas_monomuon_13TEV_eft_terms: atlas_monomuon_13TEV_eft_terms.o $(OBJ) SelectionsATLAS_monolep.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_monomuon_13TEV_eft_terms.o: $(ATLAS13TEVMONOLEP)/atlas_monomuon_13TEV_eft_terms.cpp $(DEPS) $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(ATLAS13TEVMONOLEP)/EventDataATLAS_monolep.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
 SelectionsATLAS_monolep.o: $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.cpp $(ATLAS13TEVMONOLEP)/SelectionsATLAS_monolep.h $(DEPS)
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+# Specific targets for the ATLAS dilepton analysis
+ATLAS13TEVDILEP = examples/DY/atlas-dilepton-13TEV
+
+atlas_dielectron_13TEV_eft_terms: atlas_dielectron_13TEV_eft_terms.o $(OBJ) SelectionsATLAS_dilepton.o
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+atlas_dielectron_13TEV_eft_terms.o: $(ATLAS13TEVDILEP)/atlas_dielectron_13TEV_eft_terms.cpp $(DEPS) $(ATLAS13TEVDILEP)/SelectionsATLAS_dilepton.h $(ATLAS13TEVDILEP)/EventDataATLAS_dilepton.h
+	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
+
+SelectionsATLAS_dilepton.o: $(ATLAS13TEVDILEP)/SelectionsATLAS_dilepton.cpp $(ATLAS13TEVDILEP)/SelectionsATLAS_dilepton.h $(DEPS)
 	$(CXX) -c -o $@ $< $(CPPFLAGS) $(CXXFLAGS)
 
 clean:
@@ -129,7 +165,11 @@ clean:
 	rm -rf cms_monomuon_13TEV
 	rm -rf cms_monomuon_13TEV_eft_terms
 	rm -rf atlas_monoelectron_13TEV
+	rm -rf atlas_monoelectron_13TEV_eft_terms
 	rm -rf atlas_monomuon_13TEV
-
+	rm -rf atlas_monomuon_13TEV_eft_terms
+	rm -rf atlas_dielectron_13TEV_eft_terms
+	rm -rf atlas_ditauhad_bveto_13TEV_eft_terms
+	
 # Phony targets
 .PHONY: clean

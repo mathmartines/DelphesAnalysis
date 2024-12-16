@@ -9,7 +9,7 @@ void ElectronCandidatesCMS::selectObjects(EventData* event_data) const {
         if (electron->SumPtNeutral >= 0.03 * electron->PT)
             continue;
         /// kinematical checks
-        if (electron->PT > 35 && (abs(electron->Eta) < 1.4 || (abs(electron->Eta) < 1.57 && abs(electron->Eta) < 2.5))) 
+        if (electron->PT > 25 && (abs(electron->Eta) < 1.4 || (abs(electron->Eta) > 1.57 && abs(electron->Eta) < 2.5))) 
             event_data->getParticles("Electron").push_back(electron);
     }
 }
@@ -47,18 +47,16 @@ bool ElectronEvent::selectEvent(EventData* event_data) const {
     EventData::ParticlesVector& electrons = event_data->getParticles("Electron");
     if (electrons.size() < 1)
         return false;
-
     Electron* leading = EventData::getPtrToParticle<Electron>(electrons[0]);
-
-    return leading->PT > 200;
+    return leading->PT > 240;
 }
 
 bool MuonEvent::selectEvent (EventData* event_data) const {
-    EventData::ParticlesVector& muons = event_data->getParticles("Electron");
+    EventData::ParticlesVector& muons = event_data->getParticles("Muon");
     if (muons.size() < 1)
         return false;
     Muon* muon = EventData::getPtrToParticle<Muon>(muons[0]);
-    return muon->PT > 50;
+    return muon->PT > 53;
 }
 
 bool AdditionalLeptonsVeto::selectEvent(EventData* event_data) const {
@@ -88,7 +86,7 @@ bool AdditionalLeptonsVeto::selectEvent(EventData* event_data) const {
 
 bool VetoOnJets::selectEvent(EventData* event_data) const {
     EventData::ParticlesVector& jets = event_data->getParticles("Jet");
-    Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Electron")[0]);
+    Muon* muon = EventData::getPtrToParticle<Muon>(event_data->getParticles("Muon")[0]);
     const TLorentzVector muon_momentum = muon->P4();
 
     /// holds the number of jets 

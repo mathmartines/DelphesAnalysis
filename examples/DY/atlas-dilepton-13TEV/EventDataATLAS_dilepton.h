@@ -1,16 +1,14 @@
-#ifndef EVENT_DATA_ATLAS_MONOLEP_H
-#define EVENT_DATA_ATLAS_MONOLEP_H
+#ifndef EVENT_DATA_ATLAS_DILEP_H
+#define EVENT_DATA_ATLAS_DILEP_H
 
 #include "DelphesAnalysis/EventData.h"
 
 
-class EventDataATLAS_monolep: public EventData {
+class EventDataATLAS_dileptons: public EventData {
     public:
         void setBranches() override {
             addBranch ("Electron");
             addBranch ("Muon");
-            addBranch ("Jet");
-            addBranch ("MissingET");
             addBranch ("Track");
             addParticlesVector ("Electron");
             addParticlesVector ("Muon");

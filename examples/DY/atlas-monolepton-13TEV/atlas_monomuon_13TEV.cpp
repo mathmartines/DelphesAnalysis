@@ -4,7 +4,7 @@
 #include "DelphesAnalysis/ObjectSelection.h"
 #include "DelphesAnalysis/EventLoop.h"
 #include "DelphesAnalysis/EventData.h"
-#include "DelphesAnalysis/Analysis.h"
+#include "DelphesAnalysis/EventAnalysis.h"
 #include "EventDataATLAS_monolep.h"
 #include "SelectionsATLAS_monolep.h"
 
@@ -15,7 +15,7 @@ int main() {
     const ElectronsOutBarrelEndcap electron_cand(20, 2.47);
     const MuonCandidates muon_cand(20, 2.5);
     const JetSelectionsATLAS_monolep jets_cand;
-    AnalysisSelections atlas_selections ({&electron_cand, &muon_cand, &jets_cand});
+    AnalysisSelections atlas_selections ({&muon_cand, &jets_cand});
 
     /// all the cuts for the analysis
     const LeadingMuonCut leadMuonCut;
@@ -32,7 +32,7 @@ int main() {
     event_loop.setEventData(&event_data);
 
     /// handles the event analysis
-    Analysis atlas_analysis;
+    EventAnalysis atlas_analysis;
     atlas_analysis.setObjectSelection(&atlas_selections);
     atlas_analysis.setCuts(&monoe_cuts);
 

@@ -30,7 +30,7 @@ int main() {
     const AnalysisCuts cms_dimuon_cuts ({&dimuon_events, &opposite_charge, &angle_cut});
 
     /// default way to store the information about the event
-    EventDataCMS_dimuon event_data;
+    EventDataCMS event_data;
 
     /// defining the observable for the distribution
     vector<double> bin_edges = {
@@ -41,7 +41,7 @@ int main() {
         6000.0, 7000.0
     };
 
-    DielectronInvariantMass invariant_mass;
+    LeptonInvariantMass<Muon> invariant_mass("Muon");
     ObservableDistribution invm_dist (bin_edges, &invariant_mass);
 
     /// handles the loop over all the event 
@@ -54,38 +54,24 @@ int main() {
     cms_analysis.setCuts(&cms_dimuon_cuts);
 
     /// root to the folder
-    string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dielectron-13TEV/UniversalSMEFT_d8/";
-    /// all the masses
+    string simulation_folder = "/home/martines/work/MG5_aMC_v3_1_1/PhD/DY/cms-dimuon-13TEV/";
+    /// all the terms
     vector<string> eft_terms = {
-        "SM", 
-        // tilda variables
-        "cphi1T", "D4FT", "cBWT", 
-        "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", "cBWT-cBWT",
-        // d6 coefficients
-        "c2JB", "c2JW", "c2JB-c2JW", "c2JW-c2JW",
-        // d6 x renorm
-        "c2JB-c2JWrenorm", "c2JB-cBW", "c2JB-cphi1", "c2JW-c2JWrenorm", "c2JW-cBW", "c2JW-cphi1",
-        // d8 terms
-        "c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"
+        "SM", "cphi1T", "cBWT", "cphi1T-cphi1T", "cphi1T-D4FT", "cphi1T-cBWT", "D4FT-D4FT", "D4FT-cBWT", "cBWT-cBWT",
+        "c2JB", "c2JW", "c2JB-c2JB", "c2JB-c2JW", "c2JW-c2JW", "c2JB-cphi1", "c2JB-cBW", "c2JW-cphi1", "c2JW-cBW",
+        "c7psi4H2", "c2psi4D2", "c3psi4D2", "c1psi2H2D3", "c2psi2H2D3"
     };
-
-    // list of d8 coefficients
-    vector<string> d8coefs = {"c1psi2H2D3", "c2psi2H2D3", "c5psi4H2", "c4psi4H2", "c7psi4H2", "c2psi4D2", "c3psi4D2"};
-
-    /// number of bins in the folder 
-    int nbins = 29;
 
     // json file to store the output of the simulations
     json results_json;
 
     /// runs the analysis in all the simulations
     for (auto eft_term: eft_terms) {
-
-        for (int bin_index = 1; bin_index <= nbins; bin_index++) {
-            /// path to the root file
-            TString rootfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/delphes_events_final_muons.root";
+        for (int bin_index = 1; bin_index <= 9; bin_index++) {
+           /// path to the root file
+            TString rootfile = simulation_folder + "root_files/cms-dimuon-" + eft_term + "-" + to_string(bin_index) + ".root";
             /// path to the banner that stores the cross-section
-            string bannerfile = simulation_folder + eft_term + "/bin_" + to_string(bin_index) + "/Events/run_01/run_01_tag_1_banner.txt";
+            string bannerfile = simulation_folder + "lhe_files/cms-dimuon-" + eft_term + "-" + to_string(bin_index) + ".lhe";
 
             cout << "Analysing file " << rootfile << endl;
 
@@ -100,13 +86,11 @@ int main() {
             /// reading the cross-section
             double xsection = read_weight(bannerfile);       
             cout << "Cross-section: " << xsection << endl;
+           
             /// calculating the weight
             double weight = xsection * 1000. * 140. / number_evts;
-            /// if it's a dim-8 coeff I need to add another 1/TeV^2 factor
-            if (find(d8coefs.begin(), d8coefs.end(), eft_term) != d8coefs.end())
-                weight *= 1.0E-06;
+           
             /// rescaling the result by the weight
-            /// number of events is not the same for all samples
             current_dist_ptr->rescaleDist(weight);
 
             /// adds the content to the final distribution
@@ -124,7 +108,7 @@ int main() {
     }
 
     // save json file
-    ofstream file("cms-dimuon-13TEV.json");
+    ofstream file("cms-dimuons-13TEV.json");
     if (file.is_open()) {
         file << results_json.dump(4); // Pretty print with 4 spaces indentation
         file.close();

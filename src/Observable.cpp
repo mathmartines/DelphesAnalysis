@@ -41,15 +41,15 @@ double DielectronInvariantMass::evaluateObservable(const EventData* event_data) 
     return (electron1->P4() + electron2->P4()).M();
 }
 
-double TransverseMassEventObs::evaluateObservable(const EventData* event_data) const {
-    /// getting the lepton 
-    Electron* electron = EventData::getPtrToParticle<Electron>(event_data->getParticles("Electron")[0]);
-    /// get the missing ET
-    const TClonesArray* branchMET = event_data->getBranch("MissingET");
-    MissingET* met = (MissingET*) branchMET->At(0);
-    /// calculating the angular diff
-    double delta_phi = electron->Phi - met->Phi;
-    // invariant mass
-    // std::cout << sqrt(2 * electron->PT * met->MET * (1 - cos(delta_phi))) << std::endl;
-    return sqrt(2 * electron->PT * met->MET * (1 - cos(delta_phi)));
-}
+// template<typename T>
+// double TransverseMassEventObs<T>::evaluateObservable(const EventData* event_data) const {
+//     /// getting the lepton 
+//     T* electron = EventData::getPtrToParticle<T>(event_data->getParticles(lepton_flavor_)[0]);
+//     /// get the missing ET
+//     const TClonesArray* branchMET = event_data->getBranch("MissingET");
+//     MissingET* met = (MissingET*) branchMET->At(0);
+//     /// calculating the angular diff
+//     double delta_phi = electron->Phi - met->Phi;
+//     // invariant mass
+//     return sqrt(2 * electron->PT * met->MET * (1 - cos(delta_phi)));
+// }

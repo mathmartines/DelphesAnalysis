@@ -26,7 +26,6 @@ void MuonCandidatesATLAS::selectObjects(EventData* event_data) const {
 void JetsATLAS::selectObjects(EventData* event_data) const {
     /// clear the jets vector for the analysis
     EventData::ParticlesVector& jets = event_data->getParticles("Jet");
-    jets.clear();
     // pt < 20 and |eta| < 2.5
     const TClonesArray* branch_jets = event_data->getBranch("Jet");
     for (int i = 0; i < branch_jets->GetEntries(); i++) {
@@ -45,6 +44,8 @@ void HadronicTaus::selectObjects(EventData* event_data) const {
         Jet* jet = EventData::getPtrToParticle<Jet>(jet_);
         /// check if the jet has been tagged as a tau
         if (!jet->TauTag) continue;
+        /// cuts on the jet pt
+        if (jet->PT < 65) continue;
         /// charge must be +1 or -1
         if (abs(jet->Charge) != 1) continue;
         /// the number of tracks has to be 1 or 3
@@ -85,7 +86,7 @@ bool HadronicTausCut::selectEvent(EventData* event_data) const {
     /// events must have at least two hadronic taus 
     if (!number_of_taus_cut.selectEvent(event_data))
         return false;
-    /// retriving the leading and subleading jets
+    /// retriving the leading and subleading jets   
     EventData::ParticlesVector& taus = event_data->getParticles("HadronicTau");
     Jet* leading_jet = EventData::getPtrToParticle<Jet>(taus[0]);
     /// leading jet pT cut
@@ -106,7 +107,7 @@ void HadronicTausCut::selectTaus(EventData* event_data) const {
     std::vector<EventData::Particles> selected_taus;
     for(auto& tau_had: hadronic_taus) {
         Jet* tau_cand = EventData::getPtrToParticle<Jet>(tau_had);
-        if(tau_cand->PT > 125)
+        if(tau_cand->PT > 80)
                 selected_taus.push_back(tau_had);
     }
     /// updating the list of hadronic taus in the event data
