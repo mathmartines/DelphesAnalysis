@@ -49,10 +49,10 @@ int main () {
     ObservableDistribution transverse_mass_dist (bin_edges, &mt_atlas);
 
     /// Folder where the simulations are stored
-    const string simulations_folders = "/home/martines/work/MG5_aMC_v3_1_1/PhD/High-PT/atlas-ditau-13TEV/Leptoquark/1TEV/";
+    const string simulations_folders = "/home/martines/work/MG5_aMC_v3_1_1/PhD/High-PT/atlas-ditau-13TEV/Leptoquark/1.5TEV/";
     
     /// EFT terms
-    vector<string> eft_terms = {"x1L-x1L", "x1L-x1L-x1L-x1L"};
+    vector<string> eft_terms = {"x1L-x1L-x1L-x1L"};
 
     /// Total number of bins for each simulation
     int nbins = 15;
@@ -67,10 +67,10 @@ int main () {
         for (int i = 1; i <= nbins; i++) {
 
             /// Path to the .root file 
-            TString root_file = simulations_folders + "root_files_xL13_xL13/atlas-ditau-" + term + "-" + to_string(i) + ".root";
+            TString root_file = simulations_folders + "root_files_xL23_xL33/atlas-ditau-" + term + "-" + to_string(i) + ".root";
 
             /// path to the banner that stores the cross-section
-            string bannerfile = simulations_folders + "lhe_files_xL13_xL13/atlas-ditau-" + term + "-" + to_string(i) + ".lhe";
+            string bannerfile = simulations_folders + "lhe_files_xL23_xL33/atlas-ditau-" + term + "-" + to_string(i) + ".lhe";
 
             cout << endl << "Analysing file " << root_file << endl;
             
@@ -110,7 +110,7 @@ int main () {
 
     /// Saves .json file
     // save json file
-    ofstream file("x1L13-x1L13-1TEV.json");
+    ofstream file("x1L23-x1L33-1.5TEV.json");
     if (file.is_open()) {
         file << results_json.dump(4); // Pretty print with 4 spaces indentation
         file.close();
